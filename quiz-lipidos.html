@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Lípidos · Biología Lulú</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0f0a;--card:#111a11;--border:#1e2e1e;
+  --accent:#4ade80;--accent2:#34d399;
+  --correct:#34d399;--wrong:#f87171;
+  --text:#ede9fe;--muted:#8b80a8;
+}
+html,body{min-height:100%;background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  -webkit-tap-highlight-color:transparent}
+body{display:flex;flex-direction:column;align-items:center;padding:20px 14px 60px}
+header{text-align:center;margin-bottom:22px;width:100%;max-width:480px}
+.back{display:inline-block;color:var(--accent);font-size:13px;font-weight:600;
+  text-decoration:none;margin-bottom:14px;padding:6px 14px;border-radius:99px;
+  background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1)}
+.eyebrow{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:6px}
+h1{font-size:clamp(24px,7vw,34px);font-weight:800;color:#fff;line-height:1.15;margin-bottom:8px}
+.tag-row{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:8px 0 6px}
+.tag{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);
+  border-radius:99px;padding:3px 11px;font-size:11px;color:var(--accent);font-weight:600}
+.subtitle{color:var(--muted);font-size:12px;margin-top:4px}
+.pw{width:100%;max-width:480px;margin-bottom:16px}
+.pm{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:5px}
+.pt{height:5px;background:var(--border);border-radius:99px;overflow:hidden}
+.pf{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));
+  border-radius:99px;transition:width .4s ease}
+.card{background:var(--card);border:1px solid var(--border);border-radius:20px;
+  padding:22px 18px;width:100%;max-width:480px;box-shadow:0 8px 40px rgba(0,0,0,.5)}
+.qn{font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:10px}
+.qt{font-size:clamp(15px,4vw,18px);font-weight:700;line-height:1.45;margin-bottom:20px;color:#fff}
+.opts{display:flex;flex-direction:column;gap:9px}
+.opt{background:transparent;border:1.5px solid var(--border);border-radius:13px;
+  padding:13px 14px;color:var(--text);font-family:inherit;font-size:14px;text-align:left;
+  cursor:pointer;display:flex;align-items:flex-start;gap:11px;line-height:1.45;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;
+  transition:border-color .15s,background .15s;width:100%}
+.opt:active:not(:disabled){background:rgba(255,255,255,0.05)}
+.ol{width:26px;height:26px;min-width:26px;border-radius:50%;background:var(--border);
+  display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;
+  transition:background .2s;flex-shrink:0}
+.opt.correct{border-color:var(--correct);background:rgba(52,211,153,.08)}
+.opt.correct .ol{background:var(--correct);color:#0d1f17}
+.opt.wrong{border-color:var(--wrong);background:rgba(248,113,113,.08)}
+.opt.wrong .ol{background:var(--wrong);color:#fff}
+.opt:disabled{cursor:default}
+.fb{margin-top:14px;padding:12px 14px;border-radius:12px;font-size:13px;
+  line-height:1.55;display:none}
+.fb.show{display:block}
+.fb.ok{background:rgba(52,211,153,.09);border:1px solid rgba(52,211,153,.25);color:#6ee7b7}
+.fb.bad{background:rgba(248,113,113,.09);border:1px solid rgba(248,113,113,.25);color:#fca5a5}
+.bn{margin-top:16px;width:100%;padding:15px;border-radius:13px;border:none;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;
+  font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;display:none;
+  touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.bn.show{display:block}
+.results{display:none;width:100%;max-width:480px}
+.results.show{display:block}
+.rc{background:var(--card);border:1px solid var(--border);border-radius:20px;
+  padding:36px 18px;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,.5)}
+.sr{width:110px;height:110px;border-radius:50%;
+  background:conic-gradient(var(--accent) var(--pct,0%),var(--border) 0);
+  display:flex;align-items:center;justify-content:center;margin:0 auto 18px;position:relative}
+.sr::before{content:'';width:80px;height:80px;border-radius:50%;
+  background:var(--card);position:absolute}
+.sn{font-size:24px;font-weight:800;position:relative;z-index:1;color:#fff}
+.rc h2{font-size:20px;font-weight:700;margin-bottom:6px;color:#fff}
+.rc>p{color:var(--muted);font-size:13px;margin-bottom:22px}
+.rl{text-align:left;display:flex;flex-direction:column;gap:8px;margin-bottom:22px}
+.ri{padding:10px 13px;border-radius:10px;font-size:12px;line-height:1.5;border:1px solid}
+.ri.ok{border-color:rgba(52,211,153,.3);background:rgba(52,211,153,.06)}
+.ri.fail{border-color:rgba(248,113,113,.3);background:rgba(248,113,113,.06)}
+.ri .rlab{font-weight:600;display:block;margin-bottom:2px}
+.ri.ok .rlab{color:#6ee7b7}.ri.fail .rlab{color:#fca5a5}
+.ri .rans{color:var(--muted);font-size:11px}
+.br{width:100%;padding:15px;border-radius:13px;border:none;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;
+  font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;touch-action:manipulation}
+</style>
+</head>
+<body>
+<header>
+  <a href="index.html" class="back">← Volver al inicio</a>
+  <div class="eyebrow">Biología · Biomoléculas Orgánicas</div>
+  <h1>🫧 Lípidos</h1>
+  <div class="tag-row"><span class="tag">🫧 Grasas</span><span class="tag">🔋 Energía</span><span class="tag">🧱 Membrana</span></div>
+  <p class="subtitle">12 preguntas · Basado en tu resumen</p>
+</header>
+<div class="pw">
+  <div class="pm"><span id="pt">Pregunta 1 de 12</span><span id="st">0 correctas</span></div>
+  <div class="pt"><div class="pf" id="pf" style="width:8%"></div></div>
+</div>
+<div class="card" id="qcard">
+  <div class="qn" id="qn">Pregunta 1</div>
+  <div class="qt" id="qt"></div>
+  <div class="opts" id="qo"></div>
+  <div class="fb" id="fb"></div>
+  <button class="bn" id="bn">Siguiente →</button>
+</div>
+<div class="results" id="res">
+  <div class="rc">
+    <div class="sr" id="sr"><span class="sn" id="sf"></span></div>
+    <h2 id="rt"></h2><p id="rs"></p>
+    <div class="rl" id="rl"></div>
+    <button class="br" onclick="init()">🔁 Intentar de nuevo</button>
+  </div>
+</div>
+<script>
+var Q=[{"q": "¿Con qué elementos están formados los lípidos?", "opts": ["C, H, O, N y S", "C, H y O (con menos oxígeno que los glúcidos)", "C, H, O y P", "Solo C y H"], "ans": 1, "exp": "Los lípidos están formados por C, H y O, pero con MENOS OXÍGENO que los glúcidos."}, {"q": "¿Cómo se comportan los lípidos frente al agua?", "opts": ["Se disuelven fácilmente en agua", "Son hidrófobos: NO se disuelven en agua", "Se disuelven solo en agua caliente", "Son anfipáticos: siempre se mezclan con el agua"], "ans": 1, "exp": "Los lípidos son HIDRÓFOBOS: no se disuelven en agua, pero sí en disolventes orgánicos como bencina o cloroformo."}, {"q": "¿Por qué no es del todo correcto llamar 'grasas' a todos los lípidos?", "opts": ["Porque los lípidos no tienen grasa", "Porque las grasas son solo un tipo de lípido (de origen animal)", "Porque las grasas son de origen vegetal solamente", "Porque las grasas tienen más oxígeno que los lípidos"], "ans": 1, "exp": "Las GRASAS son solo un tipo de lípido (los de origen animal). El término lípido es más amplio e incluye muchos otros tipos."}, {"q": "¿Cuál es la principal función de los triglicéridos?", "opts": ["Formar membranas celulares", "Transportar oxígeno en la sangre", "Ser la principal reserva de energía de los animales", "Regular el azúcar en sangre"], "ans": 2, "exp": "Los TRIGLICÉRIDOS son la principal RESERVA DE ENERGÍA de los animales."}, {"q": "¿Qué lípidos forman las membranas celulares?", "opts": ["Triglicéridos y colesterol", "Fosfolípidos y colesterol (bicapa lipídica)", "Ceras y esteroides", "Glucolípidos y triglicéridos"], "ans": 1, "exp": "Las membranas celulares están formadas por FOSFOLÍPIDOS y COLESTEROL, formando la BICAPA LIPÍDICA."}, {"q": "¿Cuál es la función TÉRMICA de los lípidos?", "opts": ["Producir calor mediante reacciones químicas", "Ayudar a mantener la temperatura del cuerpo y evitar la pérdida de calor", "Enfriar el cuerpo cuando hay fiebre", "Conducir el calor hacia los órganos internos"], "ans": 1, "exp": "Los lípidos tienen función TÉRMICA: ayudan a mantener la temperatura corporal y evitan que el cuerpo pierda calor."}, {"q": "¿Qué son los lípidos saponificables?", "opts": ["Lípidos sin ácidos grasos que no se pueden hidrolizar", "Lípidos CON ácidos grasos que sí pueden hidrolizarse", "Solo los triglicéridos de origen vegetal", "Los esteroides y prostaglandinas"], "ans": 1, "exp": "Los lípidos SAPONIFICABLES tienen ácidos grasos y pueden hidrolizarse. Incluyen los simples (acilglicéridos, ceras) y los complejos (fosfolípidos, glucolípidos)."}, {"q": "¿Cuál de estos es un lípido INSAPONIFICABLE?", "opts": ["Triglicérido", "Fosfolípido", "Cera", "Esteroide"], "ans": 3, "exp": "Los ESTEROIDES (como el colesterol) son lípidos insaponificables: no tienen ácidos grasos y no se hidrolizan. También son insaponificables los terpenoides y las prostaglandinas."}, {"q": "¿Qué función tienen las hormonas esteroides?", "opts": ["Estructural: forman membranas celulares", "Reguladora: regulan el metabolismo y la reproducción", "De transporte: mueven lípidos por la sangre", "De reserva: guardan energía para emergencias"], "ans": 1, "exp": "Las hormonas esteroides tienen función REGULADORA: regulan el metabolismo y la reproducción."}, {"q": "¿Qué función tienen los lípidos respecto a los órganos internos?", "opts": ["Los disuelven para facilitar su funcionamiento", "Les dan consistencia y los protegen", "Los conectan entre sí mediante membranas", "Los nutren directamente"], "ans": 1, "exp": "Los lípidos tienen función ESTRUCTURAL y de PROTECCIÓN: dan consistencia y protegen a los órganos internos."}, {"q": "¿Cómo transporta el cuerpo los lípidos desde el intestino?", "opts": ["Disueltos directamente en el agua de la sangre", "Mediante ácidos biliares y lipoproteínas", "Solo a través del sistema linfático", "Con la ayuda de la hemoglobina"], "ans": 1, "exp": "El cuerpo mueve los lípidos desde el intestino usando ÁCIDOS BILIARES y LIPOPROTEÍNAS, ya que los lípidos no se disuelven en la sangre."}, {"q": "¿Las vitaminas liposolubles (A, D, E, K) son lípidos?", "opts": ["No, son proteínas especiales", "No, son un tipo de glúcido", "Sí, las vitaminas liposolubles son lípidos", "No, son ácidos nucleicos modificados"], "ans": 2, "exp": "Sí, las VITAMINAS LIPOSOLUBLES (A, D, E, K) son lípidos con función reguladora."}];
+var cur=0,score=0,ans=[];
+var T=Q.length;
+function init(){cur=0;score=0;ans=[];
+  document.getElementById('qcard').style.display='block';
+  document.getElementById('res').className='results';render()}
+function render(){
+  var q=Q[cur];
+  document.getElementById('qn').textContent='Pregunta '+(cur+1);
+  document.getElementById('qt').textContent=q.q;
+  document.getElementById('pt').textContent='Pregunta '+(cur+1)+' de '+T;
+  document.getElementById('st').textContent=score+(score!==1?' correctas':' correcta');
+  document.getElementById('pf').style.width=(Math.round((cur/T)*100)+8)+'%';
+  var fb=document.getElementById('fb');fb.className='fb';fb.innerHTML='';
+  document.getElementById('bn').className='bn';
+  var c=document.getElementById('qo');c.innerHTML='';
+  var L=['A','B','C','D'];
+  for(var i=0;i<q.opts.length;i++){(function(idx){
+    var b=document.createElement('button');b.className='opt';
+    b.innerHTML='<span class="ol">'+L[idx]+'</span><span>'+q.opts[idx]+'</span>';
+    b.addEventListener('click',function(){pick(idx)});c.appendChild(b);
+  })(i)}
+}
+function pick(idx){
+  var q=Q[cur];
+  var bs=document.querySelectorAll('.opt');
+  for(var i=0;i<bs.length;i++)bs[i].disabled=true;
+  var ok=idx===q.ans;if(ok)score++;
+  ans.push({q:q.q,chosen:idx,ans:q.ans,ok:ok,opts:q.opts});
+  bs[q.ans].className+=' correct';if(!ok)bs[idx].className+=' wrong';
+  var fb=document.getElementById('fb');
+  fb.innerHTML=ok?'✅ ¡Correcto! '+q.exp:'❌ Incorrecto. La correcta era: '+q.opts[q.ans]+'. '+q.exp;
+  fb.className='fb show '+(ok?'ok':'bad');
+  var bn=document.getElementById('bn');
+  bn.textContent=cur<T-1?'Siguiente →':'Ver resultados 🎉';bn.className='bn show';
+}
+document.getElementById('bn').addEventListener('click',function(){
+  cur++;if(cur<T)render();else showRes();
+});
+function showRes(){
+  document.getElementById('qcard').style.display='none';
+  document.getElementById('res').className='results show';
+  var pct=Math.round((score/T)*100);
+  document.getElementById('sr').style.setProperty('--pct',pct+'%');
+  document.getElementById('sf').textContent=score+'/'+T;
+  var ti,su;
+  if(score===T){ti='¡Perfecto! 🌟';su=''+T+'/'+T+'. ¡Lo tenés clavado!'}
+  else if(score>=T*.8){ti='¡Muy bien! 💪';su='Casi todo bien. Repasá las que fallaste.'}
+  else if(score>=T*.6){ti='Bien, podés mejorar 📚';su='Más de la mitad bien. Vale repasar.'}
+  else{ti='A repasar 😅';su='No te preocupes, con otro repaso va a quedar. 💜'}
+  document.getElementById('rt').textContent=ti;document.getElementById('rs').textContent=su;
+  var rl=document.getElementById('rl');rl.innerHTML='';
+  for(var i=0;i<ans.length;i++){
+    var a=ans[i];var d=document.createElement('div');d.className='ri '+(a.ok?'ok':'fail');
+    var h='<span class="rlab">'+(a.ok?'✅':'❌')+' P'+(i+1)+': '+a.q+'</span>';
+    if(!a.ok)h+='<span class="rans">Tu respuesta: '+a.opts[a.chosen]+' · Correcta: '+a.opts[a.ans]+'</span>';
+    d.innerHTML=h;rl.appendChild(d);
+  }
+}
+init();
+</script>
+</body>
+</html>

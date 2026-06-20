@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Componentes Comunes a Todas las Células · Biología Lulú</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a080f;--card:#14101e;--border:#221a33;
+  --accent:#e879f9;--accent2:#a78bfa;
+  --correct:#34d399;--wrong:#f87171;
+  --text:#ede9fe;--muted:#8b80a8;
+}
+html,body{min-height:100%;background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  -webkit-tap-highlight-color:transparent}
+body{display:flex;flex-direction:column;align-items:center;padding:20px 14px 60px}
+header{text-align:center;margin-bottom:22px;width:100%;max-width:480px}
+.back{display:inline-block;color:var(--accent);font-size:13px;font-weight:600;
+  text-decoration:none;margin-bottom:14px;padding:6px 14px;border-radius:99px;
+  background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1)}
+.eyebrow{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:6px}
+h1{font-size:clamp(24px,7vw,34px);font-weight:800;color:#fff;line-height:1.15;margin-bottom:8px}
+.tag-row{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:8px 0 6px}
+.tag{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);
+  border-radius:99px;padding:3px 11px;font-size:11px;color:var(--accent);font-weight:600}
+.subtitle{color:var(--muted);font-size:12px;margin-top:4px}
+.pw{width:100%;max-width:480px;margin-bottom:16px}
+.pm{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:5px}
+.pt{height:5px;background:var(--border);border-radius:99px;overflow:hidden}
+.pf{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));
+  border-radius:99px;transition:width .4s ease}
+.card{background:var(--card);border:1px solid var(--border);border-radius:20px;
+  padding:22px 18px;width:100%;max-width:480px;box-shadow:0 8px 40px rgba(0,0,0,.5)}
+.qn{font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:10px}
+.qt{font-size:clamp(15px,4vw,18px);font-weight:700;line-height:1.45;margin-bottom:20px;color:#fff}
+.opts{display:flex;flex-direction:column;gap:9px}
+.opt{background:transparent;border:1.5px solid var(--border);border-radius:13px;
+  padding:13px 14px;color:var(--text);font-family:inherit;font-size:14px;text-align:left;
+  cursor:pointer;display:flex;align-items:flex-start;gap:11px;line-height:1.45;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;
+  transition:border-color .15s,background .15s;width:100%}
+.opt:active:not(:disabled){background:rgba(255,255,255,0.05)}
+.ol{width:26px;height:26px;min-width:26px;border-radius:50%;background:var(--border);
+  display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;
+  transition:background .2s;flex-shrink:0}
+.opt.correct{border-color:var(--correct);background:rgba(52,211,153,.08)}
+.opt.correct .ol{background:var(--correct);color:#0d1f17}
+.opt.wrong{border-color:var(--wrong);background:rgba(248,113,113,.08)}
+.opt.wrong .ol{background:var(--wrong);color:#fff}
+.opt:disabled{cursor:default}
+.fb{margin-top:14px;padding:12px 14px;border-radius:12px;font-size:13px;
+  line-height:1.55;display:none}
+.fb.show{display:block}
+.fb.ok{background:rgba(52,211,153,.09);border:1px solid rgba(52,211,153,.25);color:#6ee7b7}
+.fb.bad{background:rgba(248,113,113,.09);border:1px solid rgba(248,113,113,.25);color:#fca5a5}
+.bn{margin-top:16px;width:100%;padding:15px;border-radius:13px;border:none;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;
+  font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;display:none;
+  touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.bn.show{display:block}
+.results{display:none;width:100%;max-width:480px}
+.results.show{display:block}
+.rc{background:var(--card);border:1px solid var(--border);border-radius:20px;
+  padding:36px 18px;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,.5)}
+.sr{width:110px;height:110px;border-radius:50%;
+  background:conic-gradient(var(--accent) var(--pct,0%),var(--border) 0);
+  display:flex;align-items:center;justify-content:center;margin:0 auto 18px;position:relative}
+.sr::before{content:'';width:80px;height:80px;border-radius:50%;
+  background:var(--card);position:absolute}
+.sn{font-size:24px;font-weight:800;position:relative;z-index:1;color:#fff}
+.rc h2{font-size:20px;font-weight:700;margin-bottom:6px;color:#fff}
+.rc>p{color:var(--muted);font-size:13px;margin-bottom:22px}
+.rl{text-align:left;display:flex;flex-direction:column;gap:8px;margin-bottom:22px}
+.ri{padding:10px 13px;border-radius:10px;font-size:12px;line-height:1.5;border:1px solid}
+.ri.ok{border-color:rgba(52,211,153,.3);background:rgba(52,211,153,.06)}
+.ri.fail{border-color:rgba(248,113,113,.3);background:rgba(248,113,113,.06)}
+.ri .rlab{font-weight:600;display:block;margin-bottom:2px}
+.ri.ok .rlab{color:#6ee7b7}.ri.fail .rlab{color:#fca5a5}
+.ri .rans{color:var(--muted);font-size:11px}
+.br{width:100%;padding:15px;border-radius:13px;border:none;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;
+  font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;touch-action:manipulation}
+</style>
+</head>
+<body>
+<header>
+  <a href="index.html" class="back">← Volver al inicio</a>
+  <div class="eyebrow">Biología · Tema 2 · Célula</div>
+  <h1>🦠 Componentes Comunes a Todas las Células</h1>
+  <div class="tag-row"><span class="tag">🧱 Membrana</span><span class="tag">🌊 Citoplasma</span><span class="tag">🔬 Funciones</span></div>
+  <p class="subtitle">12 preguntas · Basado en tu resumen</p>
+</header>
+<div class="pw">
+  <div class="pm"><span id="pt">Pregunta 1 de 12</span><span id="st">0 correctas</span></div>
+  <div class="pt"><div class="pf" id="pf" style="width:8%"></div></div>
+</div>
+<div class="card" id="qcard">
+  <div class="qn" id="qn">Pregunta 1</div>
+  <div class="qt" id="qt"></div>
+  <div class="opts" id="qo"></div>
+  <div class="fb" id="fb"></div>
+  <button class="bn" id="bn">Siguiente →</button>
+</div>
+<div class="results" id="res">
+  <div class="rc">
+    <div class="sr" id="sr"><span class="sn" id="sf"></span></div>
+    <h2 id="rt"></h2><p id="rs"></p>
+    <div class="rl" id="rl"></div>
+    <button class="br" onclick="init()">🔁 Intentar de nuevo</button>
+  </div>
+</div>
+<script>
+var Q=[{"q": "¿Cuál es la definición de célula según el resumen?", "opts": ["La molécula más grande de los seres vivos", "El primer nivel de organización capaz de tener vida propia; la unidad de vida más pequeña", "Un conjunto de tejidos que forman órganos", "La unidad de información genética"], "ans": 1, "exp": "La CÉLULA es el primer nivel de organización capaz de tener VIDA PROPIA: es la UNIDAD DE VIDA MÁS PEQUEÑA."}, {"q": "¿Qué tres componentes comparten TODAS las células sin excepción?", "opts": ["Núcleo, mitocondrias y ribosomas", "Membrana plasmática, citoplasma y material genético (ADN/ARN) con ribosomas", "Pared celular, cloroplastos y vacuolas", "Centríolos, lisosomas y aparato de Golgi"], "ans": 1, "exp": "TODAS las células comparten: MEMBRANA PLASMÁTICA, CITOPLASMA y MATERIAL GENÉTICO (ADN y ARN) con RIBOSOMAS."}, {"q": "¿Cuál es la función de la membrana plasmática?", "opts": ["Producir energía para la célula", "Fabricar proteínas", "Separar la célula del medio y controlar qué entra y qué sale (barrera selectiva)", "Almacenar el material genético"], "ans": 2, "exp": "La MEMBRANA PLASMÁTICA separa la célula del medio y actúa como BARRERA SELECTIVA controlando qué entra y qué sale."}, {"q": "¿Qué son los ribosomas y qué función cumplen?", "opts": ["Organelas con membrana que producen energía", "Estructuras encargadas de fabricar proteínas", "Organelas que digieren materiales viejos", "Canales que conectan el núcleo con el citoplasma"], "ans": 1, "exp": "Los RIBOSOMAS son estructuras que fabrican PROTEÍNAS. No tienen membrana propia."}, {"q": "¿Cuáles son las 3 funciones vitales que realizan TODAS las células?", "opts": ["Fotosíntesis, respiración y reproducción", "Nutrición, relación y reproducción", "Digestión, circulación y excreción", "Crecimiento, movimiento y reproducción"], "ans": 1, "exp": "Todas las células realizan 3 funciones vitales: NUTRICIÓN (captar materia y energía), RELACIÓN (captar y responder a estímulos) y REPRODUCCIÓN (duplicar material genético y formar células nuevas)."}, {"q": "¿Cuáles son los dos tipos de células según su complejidad?", "opts": ["Animales y vegetales", "Unicelulares y multicelulares", "Procariotas y eucariotas", "Simples y complejas"], "ans": 2, "exp": "Según su complejidad, hay células PROCARIOTAS (sin núcleo definido) y EUCARIOTAS (con núcleo y organelas)."}, {"q": "¿Qué determina la forma de una célula libre sin pared rígida como la ameba?", "opts": ["Está fija y siempre tiene la misma forma", "Cambia de forma y emite pseudópodos para moverse y atrapar partículas", "Su forma es esférica siempre por la tensión superficial", "Depende del tejido en que se encuentre"], "ans": 1, "exp": "Las células libres sin pared rígida (como amebas y leucocitos) CAMBIAN DE FORMA y emiten PSEUDÓPODOS para moverse y atrapar partículas."}, {"q": "¿Por qué los glóbulos rojos tienen forma redondeada?", "opts": ["Porque tienen pared celular rígida", "Porque la membrana está reforzada con proteínas adicionales", "Porque la cohesión del agua los hace esféricos, igual que las gotas", "Porque su núcleo grande los mantiene redondos"], "ans": 2, "exp": "Los glóbulos rojos son redondeados por la COHESIÓN DEL AGUA, igual que las gotas de agua tienden a ser esféricas."}, {"q": "¿Qué relación hay entre la forma de la célula y su función?", "opts": ["No hay relación, la forma es al azar", "La forma de la célula está muy relacionada con su función", "La función determina el tamaño pero no la forma", "Todas las células del mismo organismo tienen la misma forma"], "ans": 1, "exp": "La FORMA de la célula está muy relacionada con su FUNCIÓN: las musculares son alargadas para contraerse y las nerviosas tienen muchas prolongaciones para transmitir estímulos."}, {"q": "¿Cuánto miden aproximadamente la mayoría de las células humanas?", "opts": ["Entre 1 y 2 µ (micras)", "Entre 5 y 20 µ (micras)", "Entre 100 y 200 µ (micras)", "Varios centímetros"], "ans": 1, "exp": "La mayoría de las células humanas miden entre 5 y 20 MICRAS (µ). Las bacterias miden entre 1 y 2 µ."}, {"q": "¿Cuál es la célula más larga del cuerpo humano y por qué?", "opts": ["El glóbulo rojo, porque viaja por los vasos sanguíneos", "El óvulo, porque es la célula reproductiva femenina", "La neurona, cuyas prolongaciones pueden medir varios metros en animales grandes", "El hepatocito, porque el hígado es un órgano grande"], "ans": 2, "exp": "Las células más largas son las NEURONAS, cuyas prolongaciones pueden medir VARIOS METROS en animales grandes."}, {"q": "¿Qué tiene de especial el óvulo humano en cuanto a tamaño?", "opts": ["Es la célula más pequeña del cuerpo", "Mide unas 150 µ, siendo una de las células más grandes del cuerpo humano", "Mide igual que los glóbulos rojos (7 µ)", "Es invisible a simple vista"], "ans": 1, "exp": "El ÓVULO HUMANO mide unas 150 µ, siendo una de las células más grandes del cuerpo. La yema de un huevo de gallina es una SOLA CÉLULA (y la del avestruz mide 7 cm)."}];
+var cur=0,score=0,ans=[];
+var T=Q.length;
+function init(){cur=0;score=0;ans=[];
+  document.getElementById('qcard').style.display='block';
+  document.getElementById('res').className='results';render()}
+function render(){
+  var q=Q[cur];
+  document.getElementById('qn').textContent='Pregunta '+(cur+1);
+  document.getElementById('qt').textContent=q.q;
+  document.getElementById('pt').textContent='Pregunta '+(cur+1)+' de '+T;
+  document.getElementById('st').textContent=score+(score!==1?' correctas':' correcta');
+  document.getElementById('pf').style.width=(Math.round((cur/T)*100)+8)+'%';
+  var fb=document.getElementById('fb');fb.className='fb';fb.innerHTML='';
+  document.getElementById('bn').className='bn';
+  var c=document.getElementById('qo');c.innerHTML='';
+  var L=['A','B','C','D'];
+  for(var i=0;i<q.opts.length;i++){(function(idx){
+    var b=document.createElement('button');b.className='opt';
+    b.innerHTML='<span class="ol">'+L[idx]+'</span><span>'+q.opts[idx]+'</span>';
+    b.addEventListener('click',function(){pick(idx)});c.appendChild(b);
+  })(i)}
+}
+function pick(idx){
+  var q=Q[cur];
+  var bs=document.querySelectorAll('.opt');
+  for(var i=0;i<bs.length;i++)bs[i].disabled=true;
+  var ok=idx===q.ans;if(ok)score++;
+  ans.push({q:q.q,chosen:idx,ans:q.ans,ok:ok,opts:q.opts});
+  bs[q.ans].className+=' correct';if(!ok)bs[idx].className+=' wrong';
+  var fb=document.getElementById('fb');
+  fb.innerHTML=ok?'✅ ¡Correcto! '+q.exp:'❌ Incorrecto. La correcta era: '+q.opts[q.ans]+'. '+q.exp;
+  fb.className='fb show '+(ok?'ok':'bad');
+  var bn=document.getElementById('bn');
+  bn.textContent=cur<T-1?'Siguiente →':'Ver resultados 🎉';bn.className='bn show';
+}
+document.getElementById('bn').addEventListener('click',function(){
+  cur++;if(cur<T)render();else showRes();
+});
+function showRes(){
+  document.getElementById('qcard').style.display='none';
+  document.getElementById('res').className='results show';
+  var pct=Math.round((score/T)*100);
+  document.getElementById('sr').style.setProperty('--pct',pct+'%');
+  document.getElementById('sf').textContent=score+'/'+T;
+  var ti,su;
+  if(score===T){ti='¡Perfecto! 🌟';su=''+T+'/'+T+'. ¡Lo tenés clavado!'}
+  else if(score>=T*.8){ti='¡Muy bien! 💪';su='Casi todo bien. Repasá las que fallaste.'}
+  else if(score>=T*.6){ti='Bien, podés mejorar 📚';su='Más de la mitad bien. Vale repasar.'}
+  else{ti='A repasar 😅';su='No te preocupes, con otro repaso va a quedar. 💜'}
+  document.getElementById('rt').textContent=ti;document.getElementById('rs').textContent=su;
+  var rl=document.getElementById('rl');rl.innerHTML='';
+  for(var i=0;i<ans.length;i++){
+    var a=ans[i];var d=document.createElement('div');d.className='ri '+(a.ok?'ok':'fail');
+    var h='<span class="rlab">'+(a.ok?'✅':'❌')+' P'+(i+1)+': '+a.q+'</span>';
+    if(!a.ok)h+='<span class="rans">Tu respuesta: '+a.opts[a.chosen]+' · Correcta: '+a.opts[a.ans]+'</span>';
+    d.innerHTML=h;rl.appendChild(d);
+  }
+}
+init();
+</script>
+</body>
+</html>

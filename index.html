@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Biología · Quizzes de Lulú 🧬</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#08080f;--card:#10101e;--border:#1a1a2e;
+  --text:#e8e4ff;--muted:#6b6890;
+}
+html,body{min-height:100%;background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  -webkit-tap-highlight-color:transparent}
+body{display:flex;flex-direction:column;align-items:center;padding:28px 14px 60px}
+header{text-align:center;margin-bottom:32px;width:100%;max-width:520px}
+.logo{font-size:44px;display:block;margin-bottom:10px}
+.eyebrow{font-size:10px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+  color:#a78bfa;margin-bottom:6px}
+h1{font-size:clamp(26px,7vw,38px);font-weight:800;color:#fff;margin-bottom:8px;line-height:1.15}
+.subtitle{color:var(--muted);font-size:13px;line-height:1.5}
+.section-label{width:100%;max-width:520px;font-size:10px;font-weight:700;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--muted);
+  margin-bottom:10px;padding-left:2px}
+.list{display:flex;flex-direction:column;gap:10px;width:100%;max-width:520px;margin-bottom:28px}
+.qc{display:flex;align-items:center;gap:14px;padding:16px 16px;border-radius:18px;
+  background:var(--card);border:1px solid var(--border);text-decoration:none;
+  transition:transform .15s,background .15s;touch-action:manipulation;position:relative;overflow:hidden}
+.qc:active{transform:scale(0.98);background:#161628}
+.qc::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;border-radius:18px 0 0 18px}
+.c1::before{background:linear-gradient(180deg,#38bdf8,#818cf8)}
+.c2::before{background:linear-gradient(180deg,#a78bfa,#f472b6)}
+.c3::before{background:linear-gradient(180deg,#fb923c,#facc15)}
+.c4::before{background:linear-gradient(180deg,#4ade80,#34d399)}
+.c5::before{background:linear-gradient(180deg,#818cf8,#c084fc)}
+.c6::before{background:linear-gradient(180deg,#e879f9,#a78bfa)}
+.c7::before{background:linear-gradient(180deg,#fbbf24,#f97316)}
+.c8::before{background:linear-gradient(180deg,#2dd4bf,#34d399)}
+.c1{border-color:rgba(56,189,248,.2)}.c2{border-color:rgba(167,139,250,.2)}
+.c3{border-color:rgba(251,146,60,.2)}.c4{border-color:rgba(74,222,128,.2)}
+.c5{border-color:rgba(129,140,248,.2)}.c6{border-color:rgba(232,121,249,.2)}
+.c7{border-color:rgba(251,191,36,.2)}.c8{border-color:rgba(45,212,191,.2)}
+.qi{width:48px;height:48px;min-width:48px;border-radius:13px;display:flex;
+  align-items:center;justify-content:center;font-size:24px;
+  background:rgba(255,255,255,0.06)}
+.qinfo{flex:1;min-width:0}
+.qname{font-size:15px;font-weight:700;color:#fff;margin-bottom:2px}
+.qdesc{font-size:11px;color:var(--muted);line-height:1.4;margin-bottom:6px}
+.qtags{display:flex;gap:5px;flex-wrap:wrap}
+.qtag{font-size:10px;font-weight:600;padding:2px 8px;border-radius:99px;
+  border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.05);color:var(--muted)}
+.arr{font-size:18px;color:var(--muted);flex-shrink:0}
+footer{width:100%;max-width:520px;text-align:center;color:var(--muted);
+  font-size:11px;margin-top:8px;line-height:1.7}
+footer strong{color:rgba(167,139,250,0.8)}
+</style>
+</head>
+<body>
+<header>
+  <span class="logo">🧬</span>
+  <div class="eyebrow">Biología · Biomoléculas y Célula</div>
+  <h1>Quizzes de Lulú</h1>
+  <p class="subtitle">Elegí un tema y ponete a prueba.<br>Cada quiz está basado exactamente en tu resumen.</p>
+</header>
+
+<div class="section-label">🔬 Biomoléculas</div>
+<div class="list">
+  <a href="quiz-inorganicas.html" class="qc c1">
+    <div class="qi">💧</div>
+    <div class="qinfo">
+      <div class="qname">Biomoléculas Inorgánicas</div>
+      <div class="qdesc">Agua, iones, gases, aniones, cationes y regulación osmótica.</div>
+      <div class="qtags"><span class="qtag">12 preguntas</span><span class="qtag">Agua · Iones · Gases</span></div>
+    </div>
+    <div class="arr">›</div>
+  </a>
+  <a href="quiz-proteinas.html" class="qc c2">
+    <div class="qi">🧬</div>
+    <div class="qinfo">
+      <div class="qname">Proteínas</div>
+      <div class="qdesc">Aminoácidos, estructura primaria a cuaternaria y 7 funciones.</div>
+      <div class="qtags"><span class="qtag">12 preguntas</span><span class="qtag">Estructura · Funciones</span></div>
+    </div>
+    <div class="arr">›</div>
+  </a>
+  <a href="quiz-glucidos.html" class="qc c3">
+    <div class="qi">🍬</div>
+    <div class="qinfo">
+      <div class="qname">Glúcidos</div>
+      <div class="qdesc">Monosacáridos, disacáridos, polisacáridos y funciones.</div>
+      <div class="qtags"><span class="qtag">12 preguntas</span><span class="qtag">Azúcares · Energía</span></div>
+    </div>
+    <div class="arr">›</div>
+  </a>
+  <a href="quiz-lipidos.html" class="qc c4">
+    <div class="qi">🫧</div>
+    <div class="qinfo">
+      <div class="qname">Lípidos</div>
+      <div class="qdesc">Clasificación, funciones, triglicéridos y membranas celulares.</div>
+      <div class="qtags"><span class="qtag">12 preguntas</span><span class="qtag">Grasas · Membrana</span></div>
+    </div>
+    <div class="arr">›</div>
+  </a>
+  <a href="quiz-acidos-nucleicos.html" class="qc c5">
+    <div class="qi">🔬</div>
+    <div class="qinfo">
+      <div class="qname">Ácidos Nucleicos</div>
+      <div class="qdesc">ADN, ARN, nucleótidos, herencia y síntesis de proteínas.</div>
+      <div class="qtags"><span class="qtag">12 preguntas</span><span class="qtag">ADN · ARN · ATP</span></div>
+    </div>
+    <div class="arr">›</div>
+  </a>
+</div>
+
+<div class="section-label">🦠 Célula</div>
+<div class="list">
+  <a href="quiz-componentes-celula.html" class="qc c6">
+    <div class="qi">🔩</div>
+    <div class="qinfo">
+      <div class="qname">Componentes Comunes a Todas las Células</div>
+      <div class="qdesc">Membrana, citoplasma, ribosomas, funciones vitales y diversidad celular.</div>
+      <div class="qtags"><span class="qtag">12 preguntas</span><span class="qtag">Membrana · Forma · Tamaño</span></div>
+    </div>
+    <div class="arr">›</div>
+  </a>
+  <a href="quiz-procariotas.html" class="qc c7">
+    <div class="qi">🦠</div>
+    <div class="qinfo">
+      <div class="qname">Células Procariotas</div>
+      <div class="qdesc">Bacterias, ADN circular, flagelo y diferencias con eucariotas.</div>
+      <div class="qtags"><span class="qtag">12 preguntas</span><span class="qtag">Bacterias · Sin núcleo</span></div>
+    </div>
+    <div class="arr">›</div>
+  </a>
+  <a href="quiz-eucariotas.html" class="qc c8">
+    <div class="qi">🔬</div>
+    <div class="qinfo">
+      <div class="qname">Células Eucariotas</div>
+      <div class="qdesc">Organelas, diferencias animal/vegetal, mitocondrias y cloroplastos.</div>
+      <div class="qtags"><span class="qtag">12 preguntas</span><span class="qtag">Animal · Vegetal · Organelas</span></div>
+    </div>
+    <div class="arr">›</div>
+  </a>
+</div>
+
+<footer>
+  Armado con 💜 por papá<br>
+  Basado en el resumen de <strong>Biología · Biomoléculas y Célula</strong>
+</footer>
+</body>
+</html>
