@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Biomoléculas Inorgánicas · V2 · Biología Lulú</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080e1a;--card:#0f1a2e;--border:#1e2d45;
+  --accent:#38bdf8;--accent2:#818cf8;
+  --correct:#34d399;--wrong:#f87171;
+  --text:#ede9fe;--muted:#8b80a8;
+}
+html,body{min-height:100%;background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  -webkit-tap-highlight-color:transparent}
+body{display:flex;flex-direction:column;align-items:center;padding:20px 14px 60px}
+header{text-align:center;margin-bottom:22px;width:100%;max-width:480px}
+.back{display:inline-block;color:var(--accent);font-size:13px;font-weight:600;
+  text-decoration:none;margin-bottom:14px;padding:6px 14px;border-radius:99px;
+  background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1)}
+.eyebrow{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:6px}
+h1{font-size:clamp(24px,7vw,34px);font-weight:800;color:#fff;line-height:1.15;margin-bottom:8px}
+.tag-row{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:8px 0 6px}
+.tag{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);
+  border-radius:99px;padding:3px 11px;font-size:11px;color:var(--accent);font-weight:600}
+.subtitle{color:var(--muted);font-size:12px;margin-top:4px}
+.pw{width:100%;max-width:480px;margin-bottom:16px}
+.pm{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:5px}
+.pt{height:5px;background:var(--border);border-radius:99px;overflow:hidden}
+.pf{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));
+  border-radius:99px;transition:width .4s ease}
+.card{background:var(--card);border:1px solid var(--border);border-radius:20px;
+  padding:22px 18px;width:100%;max-width:480px;box-shadow:0 8px 40px rgba(0,0,0,.5)}
+.qn{font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:10px}
+.qt{font-size:clamp(15px,4vw,18px);font-weight:700;line-height:1.45;margin-bottom:20px;color:#fff}
+.opts{display:flex;flex-direction:column;gap:9px}
+.opt{background:transparent;border:1.5px solid var(--border);border-radius:13px;
+  padding:13px 14px;color:var(--text);font-family:inherit;font-size:14px;text-align:left;
+  cursor:pointer;display:flex;align-items:flex-start;gap:11px;line-height:1.45;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;
+  transition:border-color .15s,background .15s;width:100%}
+.opt:active:not(:disabled){background:rgba(255,255,255,0.05)}
+.ol{width:26px;height:26px;min-width:26px;border-radius:50%;background:var(--border);
+  display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;
+  transition:background .2s;flex-shrink:0}
+.opt.correct{border-color:var(--correct);background:rgba(52,211,153,.08)}
+.opt.correct .ol{background:var(--correct);color:#0d1f17}
+.opt.wrong{border-color:var(--wrong);background:rgba(248,113,113,.08)}
+.opt.wrong .ol{background:var(--wrong);color:#fff}
+.opt:disabled{cursor:default}
+.fb{margin-top:14px;padding:12px 14px;border-radius:12px;font-size:13px;
+  line-height:1.55;display:none}
+.fb.show{display:block}
+.fb.ok{background:rgba(52,211,153,.09);border:1px solid rgba(52,211,153,.25);color:#6ee7b7}
+.fb.bad{background:rgba(248,113,113,.09);border:1px solid rgba(248,113,113,.25);color:#fca5a5}
+.bn{margin-top:16px;width:100%;padding:15px;border-radius:13px;border:none;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;
+  font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;display:none;
+  touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.bn.show{display:block}
+.results{display:none;width:100%;max-width:480px}
+.results.show{display:block}
+.rc{background:var(--card);border:1px solid var(--border);border-radius:20px;
+  padding:36px 18px;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,.5)}
+.sr{width:110px;height:110px;border-radius:50%;
+  background:conic-gradient(var(--accent) var(--pct,0%),var(--border) 0);
+  display:flex;align-items:center;justify-content:center;margin:0 auto 18px;position:relative}
+.sr::before{content:'';width:80px;height:80px;border-radius:50%;
+  background:var(--card);position:absolute}
+.sn{font-size:24px;font-weight:800;position:relative;z-index:1;color:#fff}
+.rc h2{font-size:20px;font-weight:700;margin-bottom:6px;color:#fff}
+.rc>p{color:var(--muted);font-size:13px;margin-bottom:22px}
+.rl{text-align:left;display:flex;flex-direction:column;gap:8px;margin-bottom:22px}
+.ri{padding:10px 13px;border-radius:10px;font-size:12px;line-height:1.5;border:1px solid}
+.ri.ok{border-color:rgba(52,211,153,.3);background:rgba(52,211,153,.06)}
+.ri.fail{border-color:rgba(248,113,113,.3);background:rgba(248,113,113,.06)}
+.ri .rlab{font-weight:600;display:block;margin-bottom:2px}
+.ri.ok .rlab{color:#6ee7b7}.ri.fail .rlab{color:#fca5a5}
+.ri .rans{color:var(--muted);font-size:11px}
+.br{width:100%;padding:15px;border-radius:13px;border:none;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;
+  font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;touch-action:manipulation}
+</style>
+</head>
+<body>
+<header>
+  <a href="index.html" class="back">← Volver al inicio</a>
+  <div class="eyebrow">Biología · Tema 1 · Versión 2</div>
+  <h1>💧 Biomoléculas Inorgánicas · V2</h1>
+  <div class="tag-row"><span class="tag">💧 Agua</span><span class="tag">⚡ Iones</span><span class="tag">🌬️ Gases</span></div>
+  <p class="subtitle">10 preguntas · Basado en tu resumen</p>
+</header>
+<div class="pw">
+  <div class="pm"><span id="pt">Pregunta 1 de 10</span><span id="st">0 correctas</span></div>
+  <div class="pt"><div class="pf" id="pf" style="width:8%"></div></div>
+</div>
+<div class="card" id="qcard">
+  <div class="qn" id="qn">Pregunta 1</div>
+  <div class="qt" id="qt"></div>
+  <div class="opts" id="qo"></div>
+  <div class="fb" id="fb"></div>
+  <button class="bn" id="bn">Siguiente →</button>
+</div>
+<div class="results" id="res">
+  <div class="rc">
+    <div class="sr" id="sr"><span class="sn" id="sf"></span></div>
+    <h2 id="rt"></h2><p id="rs"></p>
+    <div class="rl" id="rl"></div>
+    <button class="br" onclick="init()">🔁 Intentar de nuevo</button>
+  </div>
+</div>
+<script>
+var Q=[{"q": "¿Pueden las biomoléculas inorgánicas contener algo de carbono?", "opts": ["No, nunca contienen carbono", "Sí, pueden tener algo de carbono, pero no es su átomo principal", "Solo si son gaseosas", "Solo el agua puede contener carbono"], "ans": 1, "exp": "Las inorgánicas PUEDEN tener algo de carbono, pero el carbono no es su átomo principal (a diferencia de las orgánicas)."}, {"q": "¿En qué dos estados pueden encontrarse los minerales en los seres vivos?", "opts": ["Líquido y gaseoso", "Sólidos o disueltos", "Solo disueltos en sangre", "Congelados o evaporados"], "ans": 1, "exp": "Los minerales pueden estar SÓLIDOS (como en huesos y dientes) o DISUELTOS (como iones en los líquidos del cuerpo)."}, {"q": "¿Qué quiere decir que el agua tiene función de 'disolvente universal'?", "opts": ["Que disuelve absolutamente todo lo que existe", "Que disuelve muchísimas sustancias distintas", "Que solo disuelve sales", "Que evita que las cosas se disuelvan"], "ans": 1, "exp": "El agua disuelve muchísimas sustancias, por eso se la llama el 'disolvente universal'. No disuelve TODO, pero sí una enorme variedad."}, {"q": "¿Qué es la regulación osmótica?", "opts": ["El control de la temperatura corporal", "El equilibrio entre el agua y las sales del organismo", "El movimiento de los gases en la sangre", "La velocidad del impulso nervioso"], "ans": 1, "exp": "La REGULACIÓN OSMÓTICA es el equilibrio entre el AGUA y las SALES dentro del organismo, en el que participan los iones."}, {"q": "Si una sustancia tiene carga positiva, ¿qué es?", "opts": ["Un anión", "Un catión", "Un gas noble", "Un mineral neutro"], "ans": 1, "exp": "Carga positiva = CATIÓN. Carga negativa = anión."}, {"q": "¿Cuál de estos grupos contiene SOLO cationes?", "opts": ["Cloruro, fosfato y carbonato", "Sodio, potasio y calcio", "Sodio, cloruro y fosfato", "Carbonato, amonio y magnesio"], "ans": 1, "exp": "Sodio, potasio y calcio son todos CATIONES (carga positiva). Los cloruros, fosfatos y carbonatos son aniones."}, {"q": "El amonio (NH₄⁺), ¿es anión o catión?", "opts": ["Anión, porque tiene nitrógeno", "Catión, porque tiene carga positiva", "No es un ion", "Depende del pH del medio"], "ans": 1, "exp": "El AMONIO (NH₄⁺) es un CATIÓN porque tiene carga positiva (el signo + lo indica)."}, {"q": "¿Qué gas es fundamental para la respiración celular (lo usamos al respirar)?", "opts": ["Nitrógeno", "Dióxido de carbono", "Oxígeno", "Hidrógeno"], "ans": 2, "exp": "El OXÍGENO (O₂) es el gas que usamos en la respiración celular para obtener energía."}, {"q": "¿Qué gas eliminamos como producto de desecho al exhalar?", "opts": ["Oxígeno", "Dióxido de carbono", "Nitrógeno", "Vapor de agua solamente"], "ans": 1, "exp": "El DIÓXIDO DE CARBONO (CO₂) es el gas de desecho que eliminamos al exhalar."}, {"q": "¿Por qué es importante que el agua amortigüe los cambios de temperatura?", "opts": ["Para que el cuerpo cambie de temperatura rápido", "Para mantener estable la temperatura interna del organismo", "Para enfriar siempre el cuerpo", "Para producir calor"], "ans": 1, "exp": "Al amortiguar los cambios de temperatura, el agua ayuda a MANTENER ESTABLE la temperatura interna, evitando cambios bruscos que dañarían al organismo."}];
+var cur=0,score=0,ans=[];
+var T=Q.length;
+function init(){cur=0;score=0;ans=[];
+  document.getElementById('qcard').style.display='block';
+  document.getElementById('res').className='results';render()}
+function render(){
+  var q=Q[cur];
+  document.getElementById('qn').textContent='Pregunta '+(cur+1);
+  document.getElementById('qt').textContent=q.q;
+  document.getElementById('pt').textContent='Pregunta '+(cur+1)+' de '+T;
+  document.getElementById('st').textContent=score+(score!==1?' correctas':' correcta');
+  document.getElementById('pf').style.width=(Math.round((cur/T)*100)+8)+'%';
+  var fb=document.getElementById('fb');fb.className='fb';fb.innerHTML='';
+  document.getElementById('bn').className='bn';
+  var c=document.getElementById('qo');c.innerHTML='';
+  var L=['A','B','C','D'];
+  for(var i=0;i<q.opts.length;i++){(function(idx){
+    var b=document.createElement('button');b.className='opt';
+    b.innerHTML='<span class="ol">'+L[idx]+'</span><span>'+q.opts[idx]+'</span>';
+    b.addEventListener('click',function(){pick(idx)});c.appendChild(b);
+  })(i)}
+}
+function pick(idx){
+  var q=Q[cur];
+  var bs=document.querySelectorAll('.opt');
+  for(var i=0;i<bs.length;i++)bs[i].disabled=true;
+  var ok=idx===q.ans;if(ok)score++;
+  ans.push({q:q.q,chosen:idx,ans:q.ans,ok:ok,opts:q.opts});
+  bs[q.ans].className+=' correct';if(!ok)bs[idx].className+=' wrong';
+  var fb=document.getElementById('fb');
+  fb.innerHTML=ok?'✅ ¡Correcto! '+q.exp:'❌ Incorrecto. La correcta era: '+q.opts[q.ans]+'. '+q.exp;
+  fb.className='fb show '+(ok?'ok':'bad');
+  var bn=document.getElementById('bn');
+  bn.textContent=cur<T-1?'Siguiente →':'Ver resultados 🎉';bn.className='bn show';
+}
+document.getElementById('bn').addEventListener('click',function(){
+  cur++;if(cur<T)render();else showRes();
+});
+function showRes(){
+  document.getElementById('qcard').style.display='none';
+  document.getElementById('res').className='results show';
+  var pct=Math.round((score/T)*100);
+  document.getElementById('sr').style.setProperty('--pct',pct+'%');
+  document.getElementById('sf').textContent=score+'/'+T;
+  var ti,su;
+  if(score===T){ti='¡Perfecto! 🌟';su=''+T+'/'+T+'. ¡Lo tenés clavado!'}
+  else if(score>=T*.8){ti='¡Muy bien! 💪';su='Casi todo bien. Repasá las que fallaste.'}
+  else if(score>=T*.6){ti='Bien, podés mejorar 📚';su='Más de la mitad bien. Vale repasar.'}
+  else{ti='A repasar 😅';su='No te preocupes, con otro repaso va a quedar. 💜'}
+  document.getElementById('rt').textContent=ti;document.getElementById('rs').textContent=su;
+  var rl=document.getElementById('rl');rl.innerHTML='';
+  for(var i=0;i<ans.length;i++){
+    var a=ans[i];var d=document.createElement('div');d.className='ri '+(a.ok?'ok':'fail');
+    var h='<span class="rlab">'+(a.ok?'✅':'❌')+' P'+(i+1)+': '+a.q+'</span>';
+    if(!a.ok)h+='<span class="rans">Tu respuesta: '+a.opts[a.chosen]+' · Correcta: '+a.opts[a.ans]+'</span>';
+    d.innerHTML=h;rl.appendChild(d);
+  }
+}
+init();
+</script>
+</body>
+</html>
