@@ -85,6 +85,16 @@ html,body{min-height:100%;background:var(--bg);color:var(--text);
 .divider{width:100%;max-width:200px;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:0 auto 28px}
 footer{width:100%;text-align:center;color:var(--muted);font-size:11px;line-height:1.8}
 footer strong{color:rgba(167,139,250,.8)}
+
+.done{font-size:9px;font-weight:700;padding:2px 8px;border-radius:99px;border:1px solid}
+.done.ok{color:#34d399;border-color:rgba(52,211,153,.45);background:rgba(52,211,153,.12)}
+.done.mid{color:#facc15;border-color:rgba(250,204,21,.45);background:rgba(250,204,21,.12)}
+.done.low{color:#f87171;border-color:rgba(248,113,113,.45);background:rgba(248,113,113,.12)}
+.prog{margin-top:16px;font-size:12px;color:var(--muted);line-height:1.7}
+.prog b{color:#c4b5fd;font-weight:700}
+.prog button{margin-top:8px;background:rgba(255,255,255,.05);border:1px solid var(--border);
+  color:var(--muted);font-family:inherit;font-size:11px;font-weight:600;padding:6px 14px;
+  border-radius:99px;cursor:pointer;touch-action:manipulation}
 </style>
 </head>
 <body>
@@ -101,6 +111,7 @@ footer strong{color:rgba(167,139,250,.8)}
       <div class="stat"><div class="stat-num">340</div><div class="stat-lbl">preguntas</div></div>
       <div class="stat"><div class="stat-num">2</div><div class="stat-lbl">unidades</div></div>
     </div>
+    <div class="prog" id="prog"></div>
   </div>
 
   <div class="tabs">
@@ -174,6 +185,42 @@ function switchVer(n){
   document.getElementById('v'+n).className='version active';
   window.scrollTo({top:0,behavior:'smooth'});
 }
+</script>
+
+<script>
+(function(){
+  function leer(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}}
+  function pintar(){
+    var viejas=document.querySelectorAll('.done');
+    for(var v=0;v<viejas.length;v++)viejas[v].parentNode.removeChild(viejas[v]);
+    var cards=document.querySelectorAll('.qc'),hechos=0,acum=0,base=0;
+    for(var i=0;i<cards.length;i++){
+      var f=cards[i].getAttribute('href').split('?')[0].replace('.html','');
+      var d=leer('lulu:'+f);
+      if(!d||!d.total)continue;
+      hechos++;acum+=d.mejor;base+=d.total;
+      var pct=Math.round(d.mejor/d.total*100);
+      var s=document.createElement('span');
+      s.className='done '+(pct>=80?'ok':(pct>=60?'mid':'low'));
+      s.textContent='★ '+d.mejor+'/'+d.total;
+      var cont=cards[i].querySelector('.qc-pills');
+      if(cont)cont.insertBefore(s,cont.firstChild);
+    }
+    var box=document.getElementById('prog');
+    if(!hechos){box.innerHTML='Todavía no hiciste ningún examen. ¡Arrancá por el que quieras!';return}
+    var prom=Math.round(acum/base*100);
+    box.innerHTML='Hiciste <b>'+hechos+' de '+cards.length+'</b> exámenes · mejor promedio <b>'+prom+'%</b>'+
+      '<br><button onclick="borrarProgreso()">Borrar mi progreso</button>';
+  }
+  window.borrarProgreso=function(){
+    if(!confirm('¿Borrar todas las notas guardadas en este dispositivo?'))return;
+    try{var fuera=[];for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);
+      if(k.indexOf('lulu:')===0)fuera.push(k)}
+      for(var j=0;j<fuera.length;j++)localStorage.removeItem(fuera[j]);}catch(e){}
+    pintar();
+  };
+  pintar();
+})();
 </script>
 </body>
 </html>

@@ -96,6 +96,21 @@ Cada archivo es autónomo y trae:
   solo las preguntas falladas, no las 12 de nuevo. Se puede encadenar: si en el repaso
   vuelve a errar algunas, el botón ofrece repasar solo esas.
 - Botón para rehacer el examen completo.
+- **Guarda la nota**: al terminar, queda registrado el mejor puntaje de cada examen y
+  el índice lo muestra como una chapa de color en cada tarjeta (verde 80%+, amarillo
+  60%+, rojo abajo de eso), más un resumen arriba con cuántos hizo y el promedio.
+  El repaso de errores no pisa la nota, porque tiene menos preguntas.
+
+### ⚠️ Sobre las notas guardadas
+
+Se guardan **en el navegador de cada dispositivo**, no en la nube. Consecuencias:
+
+- Las notas de Lulú se ven en el teléfono de Lulú, no en el de papá.
+- Si borra los datos de Safari (el mismo truco que se usa para el caché), se borran.
+- El navegador interno de WhatsApp puede no guardarlas. Conviene abrir el link en Safari.
+- Si el navegador bloquea el guardado, el examen funciona igual: simplemente no anota.
+
+Hay un botón **Borrar mi progreso** en el índice para empezar de cero.
 
 Las respuestas correctas están repartidas en partes iguales entre A, B, C y D,
 en orden mezclado. No hay patrón para adivinar.
