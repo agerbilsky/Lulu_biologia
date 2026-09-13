@@ -4,7 +4,7 @@ Plataforma de exámenes de práctica para estudiar desde el celular.
 
 **Link del sitio:** https://agerbilsky.github.io/Lulu_biologia/
 
-**29 exámenes · 340 preguntas · 2 unidades**
+**31 exámenes · 380 preguntas · 2 unidades**
 
 Todos los archivos son HTML autónomos: no cargan fuentes, scripts ni imágenes de afuera.
 Por eso abren bien incluso desde el navegador interno de WhatsApp en el iPhone.
@@ -31,8 +31,11 @@ y su CDN cachea unos 10 minutos. Mirar enseguida de subir algo siempre muestra l
 
 1. Editar o reemplazar el `.html` que corresponda.
 2. **Importante:** abrir `index.html` y cambiar la fecha en todos los links
-   (`?v=20260913` → la fecha del día). Es lo que obliga al navegador de Lulú a bajar
-   la versión nueva en vez de servir la guardada.
+   (`?v=20260913-2` → la fecha del día; si actualizás dos veces el mismo día, agregale
+   `-2`, `-3`). Es lo que obliga al navegador de Lulú a bajar la versión nueva
+   en vez de servir la guardada.
+   El botón "Volver al inicio" de cada examen **no hay que tocarlo**: se versiona solo
+   con la fecha del día, por JavaScript.
 3. Commit y esperar el check verde en **Actions**.
 
 El `index.html` además trae etiquetas `Cache-Control` en el `<head>`. Ayudan en algunos
@@ -56,7 +59,7 @@ ignorarlas). Lo que realmente funciona es el `?v=` del paso 2.
 | `quiz-procariotas.html` | `quiz-procariotas-v2.html` | Células procariotas |
 | `quiz-eucariotas.html` | `quiz-eucariotas-v2.html` | Células eucariotas |
 
-### Unidad 2 — Genética y División Celular (13 exámenes · 164 preguntas)
+### Unidad 2 — Genética y División Celular (15 exámenes · 204 preguntas)
 
 Un examen por cada dos capítulos del resumen.
 
@@ -72,14 +75,26 @@ Un examen por cada dos capítulos del resumen.
 12 preguntas cada uno. La V2 no repite ninguna pregunta de la V1: mismos temas,
 otro ángulo (más preguntas de aplicación y de razonamiento).
 
-**`gen-integrador.html`** — 20 preguntas de los 12 capítulos mezclados, tipo prueba real.
+**Integradores** — 20 preguntas cada uno, los 12 capítulos mezclados, tipo prueba real.
+Los tres cubren los mismos temas pero no comparten ni una sola pregunta entre sí.
+
+| Archivo | |
+|---|---|
+| `gen-integrador.html` | Integrador 1 |
+| `gen-integrador-v2.html` | Integrador 2 |
+| `gen-integrador-v3.html` | Integrador 3 |
 
 ### Otros
 
 - `index.html` — la portada, con dos solapas: 🔬 Biomoléculas y Células y 🧬 Genética.
   Cada solapa está organizada internamente por versiones.
-- `Clave-respuestas-genetica.pdf` — las 164 respuestas correctas de los 13 exámenes de
-  genética, con su explicación. Para tomar oral sin abrir los quizzes.
+- `Clave-respuestas-genetica.pdf` — las 204 respuestas de los 15 exámenes de genética
+  (23 páginas). El práctico para la prueba de genética.
+- `Clave-respuestas-completa.pdf` — las 380 respuestas de los 31 exámenes, las dos
+  unidades (46 páginas). El de referencia.
+
+Los dos traen, para cada pregunta, la respuesta correcta con su letra (A/B/C/D, la misma
+que se ve en pantalla) y la explicación. Sirven para tomar oral sin abrir los quizzes.
 
 ---
 
