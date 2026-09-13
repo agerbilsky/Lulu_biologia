@@ -84,11 +84,17 @@ h1{font-size:clamp(24px,7vw,34px);font-weight:800;color:#fff;line-height:1.15;ma
 .br{width:100%;padding:15px;border-radius:13px;border:none;
   background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;
   font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;touch-action:manipulation}
+.br.rev{background:linear-gradient(135deg,var(--wrong),#fb923c);
+  margin-bottom:10px;display:none}
+.br.rev.show{display:block}
+.repaso-chip{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:#fb923c;background:rgba(251,146,60,.12);
+  border:1px solid rgba(251,146,60,.3);border-radius:99px;padding:3px 10px;margin-bottom:10px}
 </style>
 </head>
 <body>
 <header>
-  <a href="index.html" class="back">← Volver al inicio</a>
+  <a href="index.html?v=20260913" class="back">← Volver al inicio</a>
   <div class="eyebrow">Biología · Biomoléculas Orgánicas · Versión 2</div>
   <h1>🧬 Proteínas · V2</h1>
   <div class="tag-row"><span class="tag">🔗 Aminoácidos</span><span class="tag">📐 Estructura</span><span class="tag">⚙️ Funciones</span></div>
@@ -110,19 +116,22 @@ h1{font-size:clamp(24px,7vw,34px);font-weight:800;color:#fff;line-height:1.15;ma
     <div class="sr" id="sr"><span class="sn" id="sf"></span></div>
     <h2 id="rt"></h2><p id="rs"></p>
     <div class="rl" id="rl"></div>
-    <button class="br" onclick="init()">🔁 Intentar de nuevo</button>
+    <button class="br rev" id="brev" onclick="init(FALLIDAS)">🎯 Repasar mis errores</button>
+    <button class="br" id="bfull" onclick="init()">🔁 Intentar de nuevo</button>
   </div>
 </div>
 <script>
 var Q=[{"q": "¿Qué significa que las proteínas son 'macromoléculas'?", "opts": ["Que son moléculas muy pequeñas", "Que son moléculas muy grandes", "Que solo existen en animales grandes", "Que se ven a simple vista"], "ans": 1, "exp": "MACROMOLÉCULAS significa moléculas MUY GRANDES, formadas por muchas unidades (aminoácidos) unidas."}, {"q": "¿Qué grupo del aminoácido es el que tiene la fórmula –COOH?", "opts": ["Grupo amino", "Grupo carboxilo", "Radical R", "Grupo fosfato"], "ans": 1, "exp": "El grupo CARBOXILO tiene la fórmula –COOH. El grupo amino es –NH₂."}, {"q": "¿Qué grupo del aminoácido tiene la fórmula –NH₂?", "opts": ["Grupo carboxilo", "Grupo amino", "Radical R", "Grupo hidroxilo"], "ans": 1, "exp": "El grupo AMINO tiene la fórmula –NH₂. El grupo carboxilo es –COOH."}, {"q": "Si combinás 20 aminoácidos diferentes en cadenas largas, ¿qué obtenés?", "opts": ["Siempre la misma proteína", "Una enorme variedad de proteínas distintas", "Solo 20 proteínas posibles", "Glúcidos complejos"], "ans": 1, "exp": "Con 20 aminoácidos en distintas combinaciones y cantidades se forma una ENORME VARIEDAD de proteínas diferentes."}, {"q": "¿Qué se libera cuando se forma un enlace peptídico entre dos aminoácidos?", "opts": ["Una molécula de oxígeno", "Una molécula de agua", "Una molécula de glucosa", "Un átomo de nitrógeno"], "ans": 1, "exp": "Al formarse el enlace peptídico se LIBERA UNA MOLÉCULA DE AGUA (reacción de condensación)."}, {"q": "¿Qué factores pueden causar la desnaturalización de una proteína?", "opts": ["El frío y la oscuridad", "Cambios de temperatura o de pH", "Agregar más agua", "La luz del sol solamente"], "ans": 1, "exp": "Los cambios bruscos de TEMPERATURA o de pH pueden romper los enlaces y desnaturalizar la proteína (perder su forma)."}, {"q": "Un ejemplo cotidiano de desnaturalización es...", "opts": ["Congelar agua", "Cocinar un huevo (la clara pasa de transparente a blanca)", "Disolver sal en agua", "Inflar un globo"], "ans": 1, "exp": "Cocinar un huevo es un ejemplo clásico: el calor DESNATURALIZA las proteínas de la clara, que pasa de transparente a blanca y sólida."}, {"q": "¿Cuántos niveles de estructura puede tener una proteína?", "opts": ["Dos", "Tres", "Cuatro", "Cinco"], "ans": 2, "exp": "Las proteínas pueden tener hasta CUATRO niveles de estructura: primaria, secundaria, terciaria y cuaternaria."}, {"q": "¿Qué función cumplen los anticuerpos?", "opts": ["Transporte de oxígeno", "Defensa del organismo contra agentes extraños", "Acelerar reacciones químicas", "Dar estructura a los tejidos"], "ans": 1, "exp": "Los anticuerpos tienen función DEFENSIVA: protegen al organismo contra agentes extraños (como virus y bacterias)."}, {"q": "La insulina, que regula el azúcar en sangre, ¿qué tipo de función proteica cumple?", "opts": ["Estructural", "Enzimática", "Hormonal (reguladora)", "De transporte"], "ans": 2, "exp": "La insulina tiene función HORMONAL o reguladora: regula el nivel de azúcar (glucosa) en la sangre."}];
-var cur=0,score=0,ans=[];
-var T=Q.length;
-function init(){cur=0;score=0;ans=[];
+var ALL=Q,cur=0,score=0,ans=[],T=Q.length,FALLIDAS=[],repaso=false;
+function init(set){
+  var usar=(set&&set.length)?set:ALL;
+  repaso=usar.length<ALL.length;
+  Q=usar;T=Q.length;cur=0;score=0;ans=[];
   document.getElementById('qcard').style.display='block';
   document.getElementById('res').className='results';render()}
 function render(){
   var q=Q[cur];
-  document.getElementById('qn').textContent='Pregunta '+(cur+1);
+  document.getElementById('qn').innerHTML=(repaso?'<span class="repaso-chip">🎯 Repaso de errores</span><br>':'')+'Pregunta '+(cur+1);
   document.getElementById('qt').textContent=q.q;
   document.getElementById('pt').textContent='Pregunta '+(cur+1)+' de '+T;
   document.getElementById('st').textContent=score+(score!==1?' correctas':' correcta');
@@ -160,18 +169,25 @@ function showRes(){
   document.getElementById('sr').style.setProperty('--pct',pct+'%');
   document.getElementById('sf').textContent=score+'/'+T;
   var ti,su;
-  if(score===T){ti='¡Perfecto! 🌟';su=''+T+'/'+T+'. ¡Lo tenés clavado!'}
+  if(score===T){ti=repaso?'¡Corregidas! 🌟':'¡Perfecto! 🌟';su=repaso?'Te salieron todas las que antes fallabas.':''+T+'/'+T+'. ¡Lo tenés clavado!'}
   else if(score>=T*.8){ti='¡Muy bien! 💪';su='Casi todo bien. Repasá las que fallaste.'}
   else if(score>=T*.6){ti='Bien, podés mejorar 📚';su='Más de la mitad bien. Vale repasar.'}
   else{ti='A repasar 😅';su='No te preocupes, con otro repaso va a quedar. 💜'}
   document.getElementById('rt').textContent=ti;document.getElementById('rs').textContent=su;
   var rl=document.getElementById('rl');rl.innerHTML='';
+  FALLIDAS=[];
   for(var i=0;i<ans.length;i++){
-    var a=ans[i];var d=document.createElement('div');d.className='ri '+(a.ok?'ok':'fail');
+    var a=ans[i];if(!a.ok)FALLIDAS.push(Q[i]);
+    var d=document.createElement('div');d.className='ri '+(a.ok?'ok':'fail');
     var h='<span class="rlab">'+(a.ok?'✅':'❌')+' P'+(i+1)+': '+a.q+'</span>';
     if(!a.ok)h+='<span class="rans">Tu respuesta: '+a.opts[a.chosen]+' · Correcta: '+a.opts[a.ans]+'</span>';
     d.innerHTML=h;rl.appendChild(d);
   }
+  var brev=document.getElementById('brev');
+  if(FALLIDAS.length){brev.className='br rev show';
+    brev.textContent='🎯 Repasar mis errores ('+FALLIDAS.length+')';}
+  else{brev.className='br rev';}
+  document.getElementById('bfull').textContent=repaso?'🔁 Hacer el examen completo':'🔁 Intentar de nuevo';
 }
 init();
 </script>

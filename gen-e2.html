@@ -84,11 +84,17 @@ h1{font-size:clamp(24px,7vw,34px);font-weight:800;color:#fff;line-height:1.15;ma
 .br{width:100%;padding:15px;border-radius:13px;border:none;
   background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;
   font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;touch-action:manipulation}
+.br.rev{background:linear-gradient(135deg,var(--wrong),#fb923c);
+  margin-bottom:10px;display:none}
+.br.rev.show{display:block}
+.repaso-chip{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:#fb923c;background:rgba(251,146,60,.12);
+  border:1px solid rgba(251,146,60,.3);border-radius:99px;padding:3px 10px;margin-bottom:10px}
 </style>
 </head>
 <body>
 <header>
-  <a href="index.html" class="back">← Volver al inicio</a>
+  <a href="index.html?v=20260913" class="back">← Volver al inicio</a>
   <div class="eyebrow">Genética · Capítulos 3 y 4</div>
   <h1>🔤 Genes, genoma y bases nitrogenadas</h1>
   <div class="tag-row"><span class="tag">🧬 46 cromosomas</span><span class="tag">🌍 Genoma</span><span class="tag">🔠 A-T · C-G</span></div>
@@ -110,19 +116,22 @@ h1{font-size:clamp(24px,7vw,34px);font-weight:800;color:#fff;line-height:1.15;ma
     <div class="sr" id="sr"><span class="sn" id="sf"></span></div>
     <h2 id="rt"></h2><p id="rs"></p>
     <div class="rl" id="rl"></div>
-    <button class="br" onclick="init()">🔁 Intentar de nuevo</button>
+    <button class="br rev" id="brev" onclick="init(FALLIDAS)">🎯 Repasar mis errores</button>
+    <button class="br" id="bfull" onclick="init()">🔁 Intentar de nuevo</button>
   </div>
 </div>
 <script>
 var Q=[{"q": "¿Qué son los genes?", "opts": ["Las proteínas que envuelven al ADN", "Los tres tipos de bases del ARN", "Las unidades hereditarias que forman los cromosomas y determinan nuestras características", "Las copias de ARN que salen del núcleo"], "ans": 2, "exp": "Cada cromosoma está formado por unidades hereditarias llamadas GENES, que son los que determinan nuestras características."}, {"q": "¿Cuántos cromosomas tiene en total cada célula humana?", "opts": ["4", "23", "46", "20.000"], "ans": 2, "exp": "46 cromosomas en total = 23 PARES de cromosomas homólogos."}, {"q": "¿Por qué a los cromosomas de cada par se los llama HOMÓLOGOS?", "opts": ["Porque uno viene del papá y el otro de la mamá", "Porque son idénticos entre sí en todo", "Porque tienen la misma cantidad de histonas", "Porque los dos vienen de la mamá"], "ans": 0, "exp": "En cada par homólogo, uno de los cromosomas viene del papá y el otro de la mamá."}, {"q": "¿Qué es el GENOMA?", "opts": ["La parte del ADN que se elimina antes de traducir", "El conjunto de las 4 bases nitrogenadas", "Todo el material genético de un organismo: sus genes más la info para construir y mantener el cuerpo", "Un solo gen del cromosoma 21"], "ans": 2, "exp": "El genoma es TODO el material genético de un organismo. Salvo que seas gemelo idéntico, tu genoma es único."}, {"q": "¿Cuántos genes se calcula que tiene el genoma humano?", "opts": ["Entre 46 y 92", "Entre 2.000 y 2.500", "Entre 200.000 y 250.000", "Entre 20.000 y 25.000"], "ans": 3, "exp": "Se calcula que el genoma humano tiene entre 20.000 y 25.000 genes."}, {"q": "¿En qué años se desarrolló el Proyecto del Genoma Humano?", "opts": ["1953-1960", "2010-2020", "1865-1900", "1990-2003"], "ans": 3, "exp": "El Proyecto del Genoma Humano se desarrolló entre 1990 y 2003."}, {"q": "¿Qué logró el Proyecto del Genoma Humano?", "opts": ["Clonar la primera oveja", "Inventar la ARN polimerasa", "Descubrir las mitocondrias", "Mapear y secuenciar por primera vez todo el genoma humano"], "ans": 3, "exp": "Fue el proyecto internacional que mapeó y secuenció por primera vez todo el genoma humano."}, {"q": "¿Con cuántas «letras» químicas está escrito el ADN?", "opts": ["2", "4", "20", "64"], "ans": 1, "exp": "Con solo 4 letras: las bases nitrogenadas adenina (A), timina (T), citosina (C) y guanina (G)."}, {"q": "La adenina (A) siempre se une con…", "opts": ["Timina (T)", "Guanina (G)", "Citosina (C)", "Otra adenina (A)"], "ans": 0, "exp": "A se une SIEMPRE con T. Es una regla sin excepciones."}, {"q": "La citosina (C) siempre se une con…", "opts": ["Adenina (A)", "Uracilo (U)", "Guanina (G)", "Timina (T)"], "ans": 2, "exp": "C se une SIEMPRE con G. Las dos únicas uniones posibles son A-T y C-G."}, {"q": "¿Cuál de estos apareamientos de bases es IMPOSIBLE?", "opts": ["A con G", "C con G", "A con T", "T con A"], "ans": 0, "exp": "A con G no existe. Solo hay dos combinaciones: A-T y C-G (que también se pueden leer al revés: T-A y G-C)."}, {"q": "¿Por qué es tan importante que las bases se unan siempre de la misma forma?", "opts": ["Para que el ADN ocupe menos espacio", "Para que la célula pueda copiar su ADN perfectamente al dividirse", "Para que el ADN pueda salir del núcleo", "Para que las histonas se peguen mejor"], "ans": 1, "exp": "Cuando una célula se divide tiene que copiar su ADN perfectamente. Si las bases no se unieran de forma correcta, las células nuevas podrían salir con errores."}];
-var cur=0,score=0,ans=[];
-var T=Q.length;
-function init(){cur=0;score=0;ans=[];
+var ALL=Q,cur=0,score=0,ans=[],T=Q.length,FALLIDAS=[],repaso=false;
+function init(set){
+  var usar=(set&&set.length)?set:ALL;
+  repaso=usar.length<ALL.length;
+  Q=usar;T=Q.length;cur=0;score=0;ans=[];
   document.getElementById('qcard').style.display='block';
   document.getElementById('res').className='results';render()}
 function render(){
   var q=Q[cur];
-  document.getElementById('qn').textContent='Pregunta '+(cur+1);
+  document.getElementById('qn').innerHTML=(repaso?'<span class="repaso-chip">🎯 Repaso de errores</span><br>':'')+'Pregunta '+(cur+1);
   document.getElementById('qt').textContent=q.q;
   document.getElementById('pt').textContent='Pregunta '+(cur+1)+' de '+T;
   document.getElementById('st').textContent=score+(score!==1?' correctas':' correcta');
@@ -160,18 +169,25 @@ function showRes(){
   document.getElementById('sr').style.setProperty('--pct',pct+'%');
   document.getElementById('sf').textContent=score+'/'+T;
   var ti,su;
-  if(score===T){ti='¡Perfecto! 🌟';su=''+T+'/'+T+'. ¡Lo tenés clavado!'}
+  if(score===T){ti=repaso?'¡Corregidas! 🌟':'¡Perfecto! 🌟';su=repaso?'Te salieron todas las que antes fallabas.':''+T+'/'+T+'. ¡Lo tenés clavado!'}
   else if(score>=T*.8){ti='¡Muy bien! 💪';su='Casi todo bien. Repasá las que fallaste.'}
   else if(score>=T*.6){ti='Bien, podés mejorar 📚';su='Más de la mitad bien. Vale repasar.'}
   else{ti='A repasar 😅';su='No te preocupes, con otro repaso va a quedar. 💜'}
   document.getElementById('rt').textContent=ti;document.getElementById('rs').textContent=su;
   var rl=document.getElementById('rl');rl.innerHTML='';
+  FALLIDAS=[];
   for(var i=0;i<ans.length;i++){
-    var a=ans[i];var d=document.createElement('div');d.className='ri '+(a.ok?'ok':'fail');
+    var a=ans[i];if(!a.ok)FALLIDAS.push(Q[i]);
+    var d=document.createElement('div');d.className='ri '+(a.ok?'ok':'fail');
     var h='<span class="rlab">'+(a.ok?'✅':'❌')+' P'+(i+1)+': '+a.q+'</span>';
     if(!a.ok)h+='<span class="rans">Tu respuesta: '+a.opts[a.chosen]+' · Correcta: '+a.opts[a.ans]+'</span>';
     d.innerHTML=h;rl.appendChild(d);
   }
+  var brev=document.getElementById('brev');
+  if(FALLIDAS.length){brev.className='br rev show';
+    brev.textContent='🎯 Repasar mis errores ('+FALLIDAS.length+')';}
+  else{brev.className='br rev';}
+  document.getElementById('bfull').textContent=repaso?'🔁 Hacer el examen completo':'🔁 Intentar de nuevo';
 }
 init();
 </script>

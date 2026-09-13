@@ -84,11 +84,17 @@ h1{font-size:clamp(24px,7vw,34px);font-weight:800;color:#fff;line-height:1.15;ma
 .br{width:100%;padding:15px;border-radius:13px;border:none;
   background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;
   font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;touch-action:manipulation}
+.br.rev{background:linear-gradient(135deg,var(--wrong),#fb923c);
+  margin-bottom:10px;display:none}
+.br.rev.show{display:block}
+.repaso-chip{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:#fb923c;background:rgba(251,146,60,.12);
+  border:1px solid rgba(251,146,60,.3);border-radius:99px;padding:3px 10px;margin-bottom:10px}
 </style>
 </head>
 <body>
 <header>
-  <a href="index.html" class="back">← Volver al inicio</a>
+  <a href="index.html?v=20260913" class="back">← Volver al inicio</a>
   <div class="eyebrow">Genética · Capítulos 5 y 6</div>
   <h1>⚙️ Transcripción, traducción y expresión génica</h1>
   <div class="tag-row"><span class="tag">📝 Transcripción</span><span class="tag">🏭 Traducción</span><span class="tag">🔑 Codón</span></div>
@@ -110,19 +116,22 @@ h1{font-size:clamp(24px,7vw,34px);font-weight:800;color:#fff;line-height:1.15;ma
     <div class="sr" id="sr"><span class="sn" id="sf"></span></div>
     <h2 id="rt"></h2><p id="rs"></p>
     <div class="rl" id="rl"></div>
-    <button class="br" onclick="init()">🔁 Intentar de nuevo</button>
+    <button class="br rev" id="brev" onclick="init(FALLIDAS)">🎯 Repasar mis errores</button>
+    <button class="br" id="bfull" onclick="init()">🔁 Intentar de nuevo</button>
   </div>
 </div>
 <script>
 var Q=[{"q": "¿Cuál es el camino completo de la información genética?", "opts": ["ADN → transcripción → ARNm → traducción → proteína", "ARNm → ADN → ribosoma → proteína", "Proteína → traducción → ADN → ARNm", "ADN → traducción → ARNt → transcripción → proteína"], "ans": 0, "exp": "ADN → (transcripción, en el núcleo) → ARNm → (traducción, en los ribosomas) → proteína."}, {"q": "¿Dónde ocurre la TRANSCRIPCIÓN?", "opts": ["En los ribosomas", "En el núcleo", "En las mitocondrias", "En la membrana celular"], "ans": 1, "exp": "La transcripción ocurre en el NÚCLEO, usando una hebra de ADN como molde."}, {"q": "¿Qué enzima se encarga de la transcripción?", "opts": ["La amilasa", "La ADN histona", "La ARN polimerasa", "La ribosomasa"], "ans": 2, "exp": "La ARN POLIMERASA abre las dos hebras del ADN y genera una copia de una de ellas, formando el ARNm."}, {"q": "En el procesamiento del ARN mensajero, ¿qué partes SE ELIMINAN?", "opts": ["Los intrones", "Los exones", "Los anticodones", "Los codones"], "ans": 0, "exp": "Los INTRONES son las partes que no se traducen y se eliminan. Los EXONES son los que quedan y forman la proteína."}, {"q": "¿Cuál es la función del ARN mensajero (ARNm)?", "opts": ["Llevar la información del ADN desde el núcleo hasta el citoplasma", "Unir las dos hebras del ADN", "Formar los ribosomas", "Transportar los aminoácidos hasta el ribosoma"], "ans": 0, "exp": "El ARNm lleva la información del ADN desde el núcleo hasta el citoplasma."}, {"q": "¿Cuál es la función del ARN de transferencia (ARNt)?", "opts": ["Formar la membrana del núcleo", "Copiar el ADN", "Transportar los aminoácidos hasta el ribosoma", "Eliminar los intrones"], "ans": 2, "exp": "El ARNt transporta los aminoácidos hasta el ribosoma para armar la proteína."}, {"q": "¿Y la del ARN ribosómico (ARNr)?", "opts": ["Guarda la información genética de reserva", "Forma los ribosomas y ayuda a unir los aminoácidos", "Fabrica las histonas", "Lleva el mensaje fuera de la célula"], "ans": 1, "exp": "El ARNr forma los ribosomas y ayuda a unir los aminoácidos entre sí."}, {"q": "¿Dónde ocurre la TRADUCCIÓN?", "opts": ["En el núcleo", "En los ribosomas, que están en el citoplasma", "En las mitocondrias", "En los cromosomas"], "ans": 1, "exp": "La traducción ocurre en los RIBOSOMAS, que están en el citoplasma. El ribosoma tiene dos partes: subunidad mayor y subunidad menor."}, {"q": "¿Qué es un CODÓN?", "opts": ["Una proteína que corta los intrones", "El nombre de cada cromosoma homólogo", "Un par de bases del ADN", "Un grupo de 3 bases del ARNm que indica qué aminoácido agregar"], "ans": 3, "exp": "El ARNm se lee de a 3 bases por vez: a ese trío se lo llama CODÓN, y cada uno indica qué aminoácido hay que agregar."}, {"q": "¿Qué es el ANTICODÓN?", "opts": ["Una base nitrogenada extra", "Un codón que está al revés en el ADN", "La señal que detiene la transcripción", "El trío de bases del ARNt que encastra con el codón del ARNm"], "ans": 3, "exp": "El ARNt tiene su propio grupo de 3 bases, el ANTICODÓN, que encastra con el codón correspondiente para colocar el aminoácido correcto."}, {"q": "El codón UGA no codifica ningún aminoácido. ¿Qué indica?", "opts": ["Que hay que empezar de nuevo", "Que el ARNm tiene un error", "Que es señal de «stop»", "Que hay que agregar dos aminoácidos"], "ans": 2, "exp": "Algunos codones, como el UGA, no codifican ningún aminoácido: son señal de STOP."}, {"q": "Si una célula muscular y una del intestino tienen exactamente el mismo ADN, ¿por qué son distintas?", "opts": ["Porque una perdió parte de su ADN", "Porque una es procariota y la otra eucariota", "Porque tienen distinta cantidad de cromosomas", "Porque cada tipo de célula lee (activa) solo los genes que necesita: es la expresión génica"], "ans": 3, "exp": "Todas tienen el mismo «libro de instrucciones» completo, pero cada una lee solo los capítulos (genes) que necesita. Eso se llama EXPRESIÓN GÉNICA."}];
-var cur=0,score=0,ans=[];
-var T=Q.length;
-function init(){cur=0;score=0;ans=[];
+var ALL=Q,cur=0,score=0,ans=[],T=Q.length,FALLIDAS=[],repaso=false;
+function init(set){
+  var usar=(set&&set.length)?set:ALL;
+  repaso=usar.length<ALL.length;
+  Q=usar;T=Q.length;cur=0;score=0;ans=[];
   document.getElementById('qcard').style.display='block';
   document.getElementById('res').className='results';render()}
 function render(){
   var q=Q[cur];
-  document.getElementById('qn').textContent='Pregunta '+(cur+1);
+  document.getElementById('qn').innerHTML=(repaso?'<span class="repaso-chip">🎯 Repaso de errores</span><br>':'')+'Pregunta '+(cur+1);
   document.getElementById('qt').textContent=q.q;
   document.getElementById('pt').textContent='Pregunta '+(cur+1)+' de '+T;
   document.getElementById('st').textContent=score+(score!==1?' correctas':' correcta');
@@ -160,18 +169,25 @@ function showRes(){
   document.getElementById('sr').style.setProperty('--pct',pct+'%');
   document.getElementById('sf').textContent=score+'/'+T;
   var ti,su;
-  if(score===T){ti='¡Perfecto! 🌟';su=''+T+'/'+T+'. ¡Lo tenés clavado!'}
+  if(score===T){ti=repaso?'¡Corregidas! 🌟':'¡Perfecto! 🌟';su=repaso?'Te salieron todas las que antes fallabas.':''+T+'/'+T+'. ¡Lo tenés clavado!'}
   else if(score>=T*.8){ti='¡Muy bien! 💪';su='Casi todo bien. Repasá las que fallaste.'}
   else if(score>=T*.6){ti='Bien, podés mejorar 📚';su='Más de la mitad bien. Vale repasar.'}
   else{ti='A repasar 😅';su='No te preocupes, con otro repaso va a quedar. 💜'}
   document.getElementById('rt').textContent=ti;document.getElementById('rs').textContent=su;
   var rl=document.getElementById('rl');rl.innerHTML='';
+  FALLIDAS=[];
   for(var i=0;i<ans.length;i++){
-    var a=ans[i];var d=document.createElement('div');d.className='ri '+(a.ok?'ok':'fail');
+    var a=ans[i];if(!a.ok)FALLIDAS.push(Q[i]);
+    var d=document.createElement('div');d.className='ri '+(a.ok?'ok':'fail');
     var h='<span class="rlab">'+(a.ok?'✅':'❌')+' P'+(i+1)+': '+a.q+'</span>';
     if(!a.ok)h+='<span class="rans">Tu respuesta: '+a.opts[a.chosen]+' · Correcta: '+a.opts[a.ans]+'</span>';
     d.innerHTML=h;rl.appendChild(d);
   }
+  var brev=document.getElementById('brev');
+  if(FALLIDAS.length){brev.className='br rev show';
+    brev.textContent='🎯 Repasar mis errores ('+FALLIDAS.length+')';}
+  else{brev.className='br rev';}
+  document.getElementById('bfull').textContent=repaso?'🔁 Hacer el examen completo':'🔁 Intentar de nuevo';
 }
 init();
 </script>

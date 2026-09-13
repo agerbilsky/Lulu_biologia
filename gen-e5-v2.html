@@ -84,11 +84,17 @@ h1{font-size:clamp(24px,7vw,34px);font-weight:800;color:#fff;line-height:1.15;ma
 .br{width:100%;padding:15px;border-radius:13px;border:none;
   background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;
   font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;touch-action:manipulation}
+.br.rev{background:linear-gradient(135deg,var(--wrong),#fb923c);
+  margin-bottom:10px;display:none}
+.br.rev.show{display:block}
+.repaso-chip{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:#fb923c;background:rgba(251,146,60,.12);
+  border:1px solid rgba(251,146,60,.3);border-radius:99px;padding:3px 10px;margin-bottom:10px}
 </style>
 </head>
 <body>
 <header>
-  <a href="index.html" class="back">← Volver al inicio</a>
+  <a href="index.html?v=20260913" class="back">← Volver al inicio</a>
   <div class="eyebrow">Genética · Capítulos 9 y 10 · V2</div>
   <h1>✂️ Mitosis, meiosis y herencia mendeliana</h1>
   <div class="tag-row"><span class="tag">🔁 Mitosis</span><span class="tag">🔀 Meiosis</span><span class="tag">🌱 Mendel</span></div>
@@ -110,19 +116,22 @@ h1{font-size:clamp(24px,7vw,34px);font-weight:800;color:#fff;line-height:1.15;ma
     <div class="sr" id="sr"><span class="sn" id="sf"></span></div>
     <h2 id="rt"></h2><p id="rs"></p>
     <div class="rl" id="rl"></div>
-    <button class="br" onclick="init()">🔁 Intentar de nuevo</button>
+    <button class="br rev" id="brev" onclick="init(FALLIDAS)">🎯 Repasar mis errores</button>
+    <button class="br" id="bfull" onclick="init()">🔁 Intentar de nuevo</button>
   </div>
 </div>
 <script>
 var Q=[{"q": "¿Qué tipo de células se forman por MEIOSIS?", "opts": ["Las bacterias", "Las células musculares", "Las células de la piel", "Las células sexuales: óvulo y espermatozoide"], "ans": 3, "exp": "La meiosis forma las células sexuales, que son haploides (23 cromosomas)."}, {"q": "¿Cómo son las células ORIGINALES en la mitosis y en la meiosis?", "opts": ["Diploides en los dos casos", "Diploide en mitosis y haploide en meiosis", "Haploide en mitosis y diploide en meiosis", "Haploides en los dos casos"], "ans": 0, "exp": "En ambos procesos la célula madre es DIPLOIDE (2n). Lo que cambia es el resultado."}, {"q": "¿Qué significa que una célula sea DIPLOIDE?", "opts": ["Que tiene el doble de ADN que lo normal", "Que tiene la mitad de los cromosomas", "Que tiene los dos juegos de cromosomas (el par completo)", "Que no tiene cromosomas sexuales"], "ans": 2, "exp": "Diploide = los dos juegos de cromosomas. Haploide = un solo juego, la mitad."}, {"q": "En la mitosis, ¿qué se lleva cada célula hija?", "opts": ["Una copia completa: una cromátide hermana por cromosoma", "El doble de ADN", "La mitad de los cromosomas", "Un juego de cromosomas del papá solamente"], "ans": 0, "exp": "Cada célula hija se lleva una copia completa (una cromátide hermana por cromosoma). Por eso son idénticas."}, {"q": "En la meiosis, ¿qué se separa en la SEGUNDA división?", "opts": ["Las histonas", "Las cromátides hermanas", "Los cromosomas homólogos", "Los cromosomas sexuales"], "ans": 1, "exp": "Primero se separan los homólogos y DESPUÉS las cromátides hermanas."}, {"q": "¿Por qué el óvulo y el espermatozoide tienen 23 cromosomas y no 46?", "opts": ["Porque se forman por mitosis", "Porque los cromosomas sexuales no cuentan", "Porque se forman por meiosis, que deja la mitad de los cromosomas", "Porque pierden cromosomas con el tiempo"], "ans": 2, "exp": "La meiosis da 4 células haploides, con la mitad de los cromosomas. Por eso las sexuales tienen 23."}, {"q": "¿Hay intercambio de ADN en la MITOSIS?", "opts": ["Sí, siempre", "Sí, pero solo en procariotas", "No: el intercambio ocurre solo en la meiosis", "Sí, pero solo en células sexuales"], "ans": 2, "exp": "En la mitosis NO hay intercambio. En la meiosis los homólogos sí intercambian partes de sus cromátidas."}, {"q": "Una persona «AA» o «aa» es…", "opts": ["Heterocigota", "Homocigota", "Diploide solamente", "Portadora de una trisomía"], "ans": 1, "exp": "HOMOCIGOTA es tener las dos copias iguales (AA o aa). Heterocigota es Aa."}, {"q": "Si A = con pecas y a = sin pecas, una persona con genotipo «Aa»…", "opts": ["No se puede saber", "Tiene pecas solo en verano", "No tiene pecas, porque se expresa el recesivo", "Tiene pecas, porque se expresa el dominante"], "ans": 3, "exp": "En una heterocigota se expresa el alelo DOMINANTE. Como A (con pecas) es dominante, tiene pecas."}, {"q": "Si B = morocho y b = rubio, ¿qué combinación da una persona RUBIA?", "opts": ["bb", "Bb", "BB", "Cualquiera de las tres"], "ans": 0, "exp": "El recesivo solo se expresa si están las dos copias recesivas: bb."}, {"q": "¿Cómo llamó Mendel a los genes al principio?", "opts": ["Alelos", "Factores hereditarios", "Fenotipos", "Cromosomas"], "ans": 1, "exp": "Al principio Mendel los llamó «factores hereditarios»."}, {"q": "¿Con qué plantas hizo Mendel sus experimentos?", "opts": ["Con maíz", "Con girasoles", "Con porotos", "Con arvejas"], "ans": 3, "exp": "Mendel estudió la herencia con sus famosos experimentos de arvejas."}];
-var cur=0,score=0,ans=[];
-var T=Q.length;
-function init(){cur=0;score=0;ans=[];
+var ALL=Q,cur=0,score=0,ans=[],T=Q.length,FALLIDAS=[],repaso=false;
+function init(set){
+  var usar=(set&&set.length)?set:ALL;
+  repaso=usar.length<ALL.length;
+  Q=usar;T=Q.length;cur=0;score=0;ans=[];
   document.getElementById('qcard').style.display='block';
   document.getElementById('res').className='results';render()}
 function render(){
   var q=Q[cur];
-  document.getElementById('qn').textContent='Pregunta '+(cur+1);
+  document.getElementById('qn').innerHTML=(repaso?'<span class="repaso-chip">🎯 Repaso de errores</span><br>':'')+'Pregunta '+(cur+1);
   document.getElementById('qt').textContent=q.q;
   document.getElementById('pt').textContent='Pregunta '+(cur+1)+' de '+T;
   document.getElementById('st').textContent=score+(score!==1?' correctas':' correcta');
@@ -160,18 +169,25 @@ function showRes(){
   document.getElementById('sr').style.setProperty('--pct',pct+'%');
   document.getElementById('sf').textContent=score+'/'+T;
   var ti,su;
-  if(score===T){ti='¡Perfecto! 🌟';su=''+T+'/'+T+'. ¡Lo tenés clavado!'}
+  if(score===T){ti=repaso?'¡Corregidas! 🌟':'¡Perfecto! 🌟';su=repaso?'Te salieron todas las que antes fallabas.':''+T+'/'+T+'. ¡Lo tenés clavado!'}
   else if(score>=T*.8){ti='¡Muy bien! 💪';su='Casi todo bien. Repasá las que fallaste.'}
   else if(score>=T*.6){ti='Bien, podés mejorar 📚';su='Más de la mitad bien. Vale repasar.'}
   else{ti='A repasar 😅';su='No te preocupes, con otro repaso va a quedar. 💜'}
   document.getElementById('rt').textContent=ti;document.getElementById('rs').textContent=su;
   var rl=document.getElementById('rl');rl.innerHTML='';
+  FALLIDAS=[];
   for(var i=0;i<ans.length;i++){
-    var a=ans[i];var d=document.createElement('div');d.className='ri '+(a.ok?'ok':'fail');
+    var a=ans[i];if(!a.ok)FALLIDAS.push(Q[i]);
+    var d=document.createElement('div');d.className='ri '+(a.ok?'ok':'fail');
     var h='<span class="rlab">'+(a.ok?'✅':'❌')+' P'+(i+1)+': '+a.q+'</span>';
     if(!a.ok)h+='<span class="rans">Tu respuesta: '+a.opts[a.chosen]+' · Correcta: '+a.opts[a.ans]+'</span>';
     d.innerHTML=h;rl.appendChild(d);
   }
+  var brev=document.getElementById('brev');
+  if(FALLIDAS.length){brev.className='br rev show';
+    brev.textContent='🎯 Repasar mis errores ('+FALLIDAS.length+')';}
+  else{brev.className='br rev';}
+  document.getElementById('bfull').textContent=repaso?'🔁 Hacer el examen completo':'🔁 Intentar de nuevo';
 }
 init();
 </script>

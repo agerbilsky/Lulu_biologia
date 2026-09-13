@@ -84,11 +84,17 @@ h1{font-size:clamp(24px,7vw,34px);font-weight:800;color:#fff;line-height:1.15;ma
 .br{width:100%;padding:15px;border-radius:13px;border:none;
   background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;
   font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;touch-action:manipulation}
+.br.rev{background:linear-gradient(135deg,var(--wrong),#fb923c);
+  margin-bottom:10px;display:none}
+.br.rev.show{display:block}
+.repaso-chip{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:#fb923c;background:rgba(251,146,60,.12);
+  border:1px solid rgba(251,146,60,.3);border-radius:99px;padding:3px 10px;margin-bottom:10px}
 </style>
 </head>
 <body>
 <header>
-  <a href="index.html" class="back">← Volver al inicio</a>
+  <a href="index.html?v=20260913" class="back">← Volver al inicio</a>
   <div class="eyebrow">Biología · Tema 1 · Versión 2</div>
   <h1>💧 Biomoléculas Inorgánicas · V2</h1>
   <div class="tag-row"><span class="tag">💧 Agua</span><span class="tag">⚡ Iones</span><span class="tag">🌬️ Gases</span></div>
@@ -110,19 +116,22 @@ h1{font-size:clamp(24px,7vw,34px);font-weight:800;color:#fff;line-height:1.15;ma
     <div class="sr" id="sr"><span class="sn" id="sf"></span></div>
     <h2 id="rt"></h2><p id="rs"></p>
     <div class="rl" id="rl"></div>
-    <button class="br" onclick="init()">🔁 Intentar de nuevo</button>
+    <button class="br rev" id="brev" onclick="init(FALLIDAS)">🎯 Repasar mis errores</button>
+    <button class="br" id="bfull" onclick="init()">🔁 Intentar de nuevo</button>
   </div>
 </div>
 <script>
 var Q=[{"q": "¿Pueden las biomoléculas inorgánicas contener algo de carbono?", "opts": ["No, nunca contienen carbono", "Sí, pueden tener algo de carbono, pero no es su átomo principal", "Solo si son gaseosas", "Solo el agua puede contener carbono"], "ans": 1, "exp": "Las inorgánicas PUEDEN tener algo de carbono, pero el carbono no es su átomo principal (a diferencia de las orgánicas)."}, {"q": "¿En qué dos estados pueden encontrarse los minerales en los seres vivos?", "opts": ["Líquido y gaseoso", "Sólidos o disueltos", "Solo disueltos en sangre", "Congelados o evaporados"], "ans": 1, "exp": "Los minerales pueden estar SÓLIDOS (como en huesos y dientes) o DISUELTOS (como iones en los líquidos del cuerpo)."}, {"q": "¿Qué quiere decir que el agua tiene función de 'disolvente universal'?", "opts": ["Que disuelve absolutamente todo lo que existe", "Que disuelve muchísimas sustancias distintas", "Que solo disuelve sales", "Que evita que las cosas se disuelvan"], "ans": 1, "exp": "El agua disuelve muchísimas sustancias, por eso se la llama el 'disolvente universal'. No disuelve TODO, pero sí una enorme variedad."}, {"q": "¿Qué es la regulación osmótica?", "opts": ["El control de la temperatura corporal", "El equilibrio entre el agua y las sales del organismo", "El movimiento de los gases en la sangre", "La velocidad del impulso nervioso"], "ans": 1, "exp": "La REGULACIÓN OSMÓTICA es el equilibrio entre el AGUA y las SALES dentro del organismo, en el que participan los iones."}, {"q": "Si una sustancia tiene carga positiva, ¿qué es?", "opts": ["Un anión", "Un catión", "Un gas noble", "Un mineral neutro"], "ans": 1, "exp": "Carga positiva = CATIÓN. Carga negativa = anión."}, {"q": "¿Cuál de estos grupos contiene SOLO cationes?", "opts": ["Cloruro, fosfato y carbonato", "Sodio, potasio y calcio", "Sodio, cloruro y fosfato", "Carbonato, amonio y magnesio"], "ans": 1, "exp": "Sodio, potasio y calcio son todos CATIONES (carga positiva). Los cloruros, fosfatos y carbonatos son aniones."}, {"q": "El amonio (NH₄⁺), ¿es anión o catión?", "opts": ["Anión, porque tiene nitrógeno", "Catión, porque tiene carga positiva", "No es un ion", "Depende del pH del medio"], "ans": 1, "exp": "El AMONIO (NH₄⁺) es un CATIÓN porque tiene carga positiva (el signo + lo indica)."}, {"q": "¿Qué gas es fundamental para la respiración celular (lo usamos al respirar)?", "opts": ["Nitrógeno", "Dióxido de carbono", "Oxígeno", "Hidrógeno"], "ans": 2, "exp": "El OXÍGENO (O₂) es el gas que usamos en la respiración celular para obtener energía."}, {"q": "¿Qué gas eliminamos como producto de desecho al exhalar?", "opts": ["Oxígeno", "Dióxido de carbono", "Nitrógeno", "Vapor de agua solamente"], "ans": 1, "exp": "El DIÓXIDO DE CARBONO (CO₂) es el gas de desecho que eliminamos al exhalar."}, {"q": "¿Por qué es importante que el agua amortigüe los cambios de temperatura?", "opts": ["Para que el cuerpo cambie de temperatura rápido", "Para mantener estable la temperatura interna del organismo", "Para enfriar siempre el cuerpo", "Para producir calor"], "ans": 1, "exp": "Al amortiguar los cambios de temperatura, el agua ayuda a MANTENER ESTABLE la temperatura interna, evitando cambios bruscos que dañarían al organismo."}];
-var cur=0,score=0,ans=[];
-var T=Q.length;
-function init(){cur=0;score=0;ans=[];
+var ALL=Q,cur=0,score=0,ans=[],T=Q.length,FALLIDAS=[],repaso=false;
+function init(set){
+  var usar=(set&&set.length)?set:ALL;
+  repaso=usar.length<ALL.length;
+  Q=usar;T=Q.length;cur=0;score=0;ans=[];
   document.getElementById('qcard').style.display='block';
   document.getElementById('res').className='results';render()}
 function render(){
   var q=Q[cur];
-  document.getElementById('qn').textContent='Pregunta '+(cur+1);
+  document.getElementById('qn').innerHTML=(repaso?'<span class="repaso-chip">🎯 Repaso de errores</span><br>':'')+'Pregunta '+(cur+1);
   document.getElementById('qt').textContent=q.q;
   document.getElementById('pt').textContent='Pregunta '+(cur+1)+' de '+T;
   document.getElementById('st').textContent=score+(score!==1?' correctas':' correcta');
@@ -160,18 +169,25 @@ function showRes(){
   document.getElementById('sr').style.setProperty('--pct',pct+'%');
   document.getElementById('sf').textContent=score+'/'+T;
   var ti,su;
-  if(score===T){ti='¡Perfecto! 🌟';su=''+T+'/'+T+'. ¡Lo tenés clavado!'}
+  if(score===T){ti=repaso?'¡Corregidas! 🌟':'¡Perfecto! 🌟';su=repaso?'Te salieron todas las que antes fallabas.':''+T+'/'+T+'. ¡Lo tenés clavado!'}
   else if(score>=T*.8){ti='¡Muy bien! 💪';su='Casi todo bien. Repasá las que fallaste.'}
   else if(score>=T*.6){ti='Bien, podés mejorar 📚';su='Más de la mitad bien. Vale repasar.'}
   else{ti='A repasar 😅';su='No te preocupes, con otro repaso va a quedar. 💜'}
   document.getElementById('rt').textContent=ti;document.getElementById('rs').textContent=su;
   var rl=document.getElementById('rl');rl.innerHTML='';
+  FALLIDAS=[];
   for(var i=0;i<ans.length;i++){
-    var a=ans[i];var d=document.createElement('div');d.className='ri '+(a.ok?'ok':'fail');
+    var a=ans[i];if(!a.ok)FALLIDAS.push(Q[i]);
+    var d=document.createElement('div');d.className='ri '+(a.ok?'ok':'fail');
     var h='<span class="rlab">'+(a.ok?'✅':'❌')+' P'+(i+1)+': '+a.q+'</span>';
     if(!a.ok)h+='<span class="rans">Tu respuesta: '+a.opts[a.chosen]+' · Correcta: '+a.opts[a.ans]+'</span>';
     d.innerHTML=h;rl.appendChild(d);
   }
+  var brev=document.getElementById('brev');
+  if(FALLIDAS.length){brev.className='br rev show';
+    brev.textContent='🎯 Repasar mis errores ('+FALLIDAS.length+')';}
+  else{brev.className='br rev';}
+  document.getElementById('bfull').textContent=repaso?'🔁 Hacer el examen completo':'🔁 Intentar de nuevo';
 }
 init();
 </script>

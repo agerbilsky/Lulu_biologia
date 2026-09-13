@@ -76,7 +76,10 @@ otro ángulo (más preguntas de aplicación y de razonamiento).
 
 ### Otros
 
-- `index.html` — la portada, con tres solapas: Versión 1, Versión 2 y 🧬 Genética.
+- `index.html` — la portada, con dos solapas: 🔬 Biomoléculas y Células y 🧬 Genética.
+  Cada solapa está organizada internamente por versiones.
+- `Clave-respuestas-genetica.pdf` — las 164 respuestas correctas de los 13 exámenes de
+  genética, con su explicación. Para tomar oral sin abrir los quizzes.
 
 ---
 
@@ -89,7 +92,10 @@ Cada archivo es autónomo y trae:
   y muestra la explicación del porqué.
 - Barra de progreso y contador de aciertos.
 - Pantalla final con el puntaje y la lista de repaso ✅/❌.
-- Botón para rehacer el examen.
+- **Modo repaso de errores**: si falló alguna, aparece un botón naranja que rehace
+  solo las preguntas falladas, no las 12 de nuevo. Se puede encadenar: si en el repaso
+  vuelve a errar algunas, el botón ofrece repasar solo esas.
+- Botón para rehacer el examen completo.
 
 Las respuestas correctas están repartidas en partes iguales entre A, B, C y D,
 en orden mezclado. No hay patrón para adivinar.

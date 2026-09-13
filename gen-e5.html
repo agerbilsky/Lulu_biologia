@@ -84,11 +84,17 @@ h1{font-size:clamp(24px,7vw,34px);font-weight:800;color:#fff;line-height:1.15;ma
 .br{width:100%;padding:15px;border-radius:13px;border:none;
   background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;
   font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;touch-action:manipulation}
+.br.rev{background:linear-gradient(135deg,var(--wrong),#fb923c);
+  margin-bottom:10px;display:none}
+.br.rev.show{display:block}
+.repaso-chip{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:#fb923c;background:rgba(251,146,60,.12);
+  border:1px solid rgba(251,146,60,.3);border-radius:99px;padding:3px 10px;margin-bottom:10px}
 </style>
 </head>
 <body>
 <header>
-  <a href="index.html" class="back">← Volver al inicio</a>
+  <a href="index.html?v=20260913" class="back">← Volver al inicio</a>
   <div class="eyebrow">Genética · Capítulos 9 y 10</div>
   <h1>✂️ Mitosis, meiosis y herencia mendeliana</h1>
   <div class="tag-row"><span class="tag">🔁 Mitosis</span><span class="tag">🔀 Meiosis</span><span class="tag">🌱 Mendel</span></div>
@@ -110,19 +116,22 @@ h1{font-size:clamp(24px,7vw,34px);font-weight:800;color:#fff;line-height:1.15;ma
     <div class="sr" id="sr"><span class="sn" id="sf"></span></div>
     <h2 id="rt"></h2><p id="rs"></p>
     <div class="rl" id="rl"></div>
-    <button class="br" onclick="init()">🔁 Intentar de nuevo</button>
+    <button class="br rev" id="brev" onclick="init(FALLIDAS)">🎯 Repasar mis errores</button>
+    <button class="br" id="bfull" onclick="init()">🔁 Intentar de nuevo</button>
   </div>
 </div>
 <script>
 var Q=[{"q": "¿Cuántas divisiones tiene la MITOSIS?", "opts": ["1", "2", "3", "4"], "ans": 0, "exp": "La mitosis tiene UNA sola división. La meiosis tiene dos."}, {"q": "¿Con qué tipo de reproducción se relaciona la MEIOSIS?", "opts": ["Con ninguna: solo repara tejidos", "Asexual", "Las dos por igual", "Sexual: forma las células sexuales"], "ans": 3, "exp": "La meiosis se relaciona con la reproducción SEXUAL, porque forma las células sexuales (óvulo y espermatozoide)."}, {"q": "¿Cuál es el resultado de la MITOSIS?", "opts": ["4 células haploides distintas", "2 células haploides", "2 células diploides idénticas a la original", "1 célula con el doble de cromosomas"], "ans": 2, "exp": "La mitosis da 2 células DIPLOIDES, idénticas entre sí y a la célula original."}, {"q": "¿Cuál es el resultado de la MEIOSIS?", "opts": ["2 células con el doble de cromosomas", "4 células diploides", "2 células diploides idénticas", "4 células haploides, con la mitad de los cromosomas"], "ans": 3, "exp": "La meiosis da 4 células HAPLOIDES, cada una con la mitad de los cromosomas de la célula original."}, {"q": "¿En cuál de los dos procesos hay intercambio de ADN entre cromosomas homólogos?", "opts": ["En los dos", "En la mitosis", "En la meiosis", "En ninguno de los dos"], "ans": 2, "exp": "Solo en la MEIOSIS: los cromosomas homólogos intercambian partes de sus cromátidas (el cruce). En la mitosis no hay intercambio."}, {"q": "¿Qué significa que una célula sea HAPLOIDE?", "opts": ["Que no tiene núcleo", "Que tiene un solo juego de cromosomas (la mitad)", "Que tiene el doble de cromosomas", "Que tiene los dos juegos completos de cromosomas"], "ans": 1, "exp": "Haploide = un solo juego (la mitad). Diploide = los dos juegos, el par completo."}, {"q": "En la meiosis, ¿qué se separa en la PRIMERA división?", "opts": ["Las cromátides hermanas", "Las histonas", "Los exones y los intrones", "Los cromosomas homólogos"], "ans": 3, "exp": "Primero se separan los cromosomas HOMÓLOGOS; recién en la segunda división se separan las cromátides hermanas."}, {"q": "¿Cómo se dividen las células procariotas?", "opts": ["Su única molécula de ADN se autoduplica, la célula se divide en dos y cada una hereda una réplica", "Se fusionan con otra célula y luego se parten en cuatro", "Por meiosis, igual que las eucariotas", "No se dividen nunca"], "ans": 0, "exp": "En los procariotas el proceso es más simple: la única molécula de ADN se autoduplica, la célula se divide en dos y cada una hereda una réplica del ADN original."}, {"q": "¿Qué es un ALELO?", "opts": ["Un trío de bases del ARNm", "Un cromosoma sin par", "Cada «versión» de un gen, que puede ser dominante o recesiva", "Una proteína que activa genes"], "ans": 2, "exp": "Un alelo es cada versión de un gen. Puede ser dominante o recesivo."}, {"q": "Una persona con los alelos «Aa» es…", "opts": ["Heterocigota, y no se expresa ninguno", "Heterocigota, y se expresa el dominante", "Homocigota, y se expresa el recesivo", "Homocigota, y se expresa el dominante"], "ans": 1, "exp": "Aa = HETEROCIGOTA (las dos copias distintas). En ese caso se expresa el alelo DOMINANTE."}, {"q": "¿Cuándo se expresa un alelo RECESIVO?", "opts": ["Solo si están las dos copias recesivas iguales (aa)", "Solo si viene del papá", "Solo en los varones", "Siempre que esté presente, aunque sea una sola copia"], "ans": 0, "exp": "El recesivo se expresa solo si están las DOS copias iguales (una de mamá y una de papá). El dominante alcanza con una sola copia."}, {"q": "¿Por qué se considera a Gregor Mendel el padre de la genética?", "opts": ["Porque fue el primero en estudiar de forma sistemática cómo se heredan las características, con sus arvejas", "Porque dirigió el Proyecto del Genoma Humano", "Porque descubrió las mitocondrias", "Porque descubrió el ADN"], "ans": 0, "exp": "Mendel fue el primero en estudiar de forma sistemática cómo se heredan las características (experimentos con arvejas). A los genes al principio los llamó «factores hereditarios»."}];
-var cur=0,score=0,ans=[];
-var T=Q.length;
-function init(){cur=0;score=0;ans=[];
+var ALL=Q,cur=0,score=0,ans=[],T=Q.length,FALLIDAS=[],repaso=false;
+function init(set){
+  var usar=(set&&set.length)?set:ALL;
+  repaso=usar.length<ALL.length;
+  Q=usar;T=Q.length;cur=0;score=0;ans=[];
   document.getElementById('qcard').style.display='block';
   document.getElementById('res').className='results';render()}
 function render(){
   var q=Q[cur];
-  document.getElementById('qn').textContent='Pregunta '+(cur+1);
+  document.getElementById('qn').innerHTML=(repaso?'<span class="repaso-chip">🎯 Repaso de errores</span><br>':'')+'Pregunta '+(cur+1);
   document.getElementById('qt').textContent=q.q;
   document.getElementById('pt').textContent='Pregunta '+(cur+1)+' de '+T;
   document.getElementById('st').textContent=score+(score!==1?' correctas':' correcta');
@@ -160,18 +169,25 @@ function showRes(){
   document.getElementById('sr').style.setProperty('--pct',pct+'%');
   document.getElementById('sf').textContent=score+'/'+T;
   var ti,su;
-  if(score===T){ti='¡Perfecto! 🌟';su=''+T+'/'+T+'. ¡Lo tenés clavado!'}
+  if(score===T){ti=repaso?'¡Corregidas! 🌟':'¡Perfecto! 🌟';su=repaso?'Te salieron todas las que antes fallabas.':''+T+'/'+T+'. ¡Lo tenés clavado!'}
   else if(score>=T*.8){ti='¡Muy bien! 💪';su='Casi todo bien. Repasá las que fallaste.'}
   else if(score>=T*.6){ti='Bien, podés mejorar 📚';su='Más de la mitad bien. Vale repasar.'}
   else{ti='A repasar 😅';su='No te preocupes, con otro repaso va a quedar. 💜'}
   document.getElementById('rt').textContent=ti;document.getElementById('rs').textContent=su;
   var rl=document.getElementById('rl');rl.innerHTML='';
+  FALLIDAS=[];
   for(var i=0;i<ans.length;i++){
-    var a=ans[i];var d=document.createElement('div');d.className='ri '+(a.ok?'ok':'fail');
+    var a=ans[i];if(!a.ok)FALLIDAS.push(Q[i]);
+    var d=document.createElement('div');d.className='ri '+(a.ok?'ok':'fail');
     var h='<span class="rlab">'+(a.ok?'✅':'❌')+' P'+(i+1)+': '+a.q+'</span>';
     if(!a.ok)h+='<span class="rans">Tu respuesta: '+a.opts[a.chosen]+' · Correcta: '+a.opts[a.ans]+'</span>';
     d.innerHTML=h;rl.appendChild(d);
   }
+  var brev=document.getElementById('brev');
+  if(FALLIDAS.length){brev.className='br rev show';
+    brev.textContent='🎯 Repasar mis errores ('+FALLIDAS.length+')';}
+  else{brev.className='br rev';}
+  document.getElementById('bfull').textContent=repaso?'🔁 Hacer el examen completo':'🔁 Intentar de nuevo';
 }
 init();
 </script>

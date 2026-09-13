@@ -84,11 +84,17 @@ h1{font-size:clamp(24px,7vw,34px);font-weight:800;color:#fff;line-height:1.15;ma
 .br{width:100%;padding:15px;border-radius:13px;border:none;
   background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;
   font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;touch-action:manipulation}
+.br.rev{background:linear-gradient(135deg,var(--wrong),#fb923c);
+  margin-bottom:10px;display:none}
+.br.rev.show{display:block}
+.repaso-chip{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:#fb923c;background:rgba(251,146,60,.12);
+  border:1px solid rgba(251,146,60,.3);border-radius:99px;padding:3px 10px;margin-bottom:10px}
 </style>
 </head>
 <body>
 <header>
-  <a href="index.html" class="back">← Volver al inicio</a>
+  <a href="index.html?v=20260913" class="back">← Volver al inicio</a>
   <div class="eyebrow">Biología · Tema 1</div>
   <h1>💧 Biomoléculas Inorgánicas</h1>
   <div class="tag-row"><span class="tag">💧 Agua</span><span class="tag">⚡ Iones</span><span class="tag">🌬️ Gases</span><span class="tag">🧂 Minerales</span></div>
@@ -110,19 +116,22 @@ h1{font-size:clamp(24px,7vw,34px);font-weight:800;color:#fff;line-height:1.15;ma
     <div class="sr" id="sr"><span class="sn" id="sf"></span></div>
     <h2 id="rt"></h2><p id="rs"></p>
     <div class="rl" id="rl"></div>
-    <button class="br" onclick="init()">🔁 Intentar de nuevo</button>
+    <button class="br rev" id="brev" onclick="init(FALLIDAS)">🎯 Repasar mis errores</button>
+    <button class="br" id="bfull" onclick="init()">🔁 Intentar de nuevo</button>
   </div>
 </div>
 <script>
 var Q=[{"q": "¿Cuál es la diferencia principal de las biomoléculas inorgánicas respecto a las orgánicas?", "opts": ["Están formadas principalmente por carbono", "Su estructura NO tiene al carbono como átomo principal", "Solo se encuentran fuera de los seres vivos", "Siempre son gaseosas"], "ans": 1, "exp": "Las biomoléculas inorgánicas pueden tener carbono, pero el carbono NO es su átomo principal."}, {"q": "¿Cuáles son las biomoléculas inorgánicas más importantes en los seres vivos?", "opts": ["Proteínas y lípidos", "Glúcidos y ácidos nucleicos", "El agua y algunos minerales", "El oxígeno y el dióxido de carbono"], "ans": 2, "exp": "Las más importantes son el AGUA y algunos MINERALES (sólidos o disueltos)."}, {"q": "¿Por qué el agua es indispensable para la vida?", "opts": ["Porque produce energía directamente", "Porque es la biomolécula inorgánica más abundante y tiene características muy útiles", "Porque contiene carbono en grandes cantidades", "Porque solo existe en los seres vivos"], "ans": 1, "exp": "El agua es la biomolécula inorgánica más abundante y es indispensable por sus múltiples propiedades útiles."}, {"q": "¿Qué significa que el agua 'amortigua los cambios de pH'?", "opts": ["Que acidifica todo lo que toca", "Que mantiene el equilibrio interno evitando cambios bruscos de acidez", "Que disuelve solo sustancias ácidas", "Que su pH siempre es 0"], "ans": 1, "exp": "Amortiguar el pH significa que el agua ayuda a MANTENER EL EQUILIBRIO INTERNO, evitando que el organismo se vuelva muy ácido o muy básico bruscamente."}, {"q": "¿Qué propiedad clave del agua la hace fundamental para transportar nutrientes?", "opts": ["Hierve a baja temperatura", "Solidifica las sustancias", "Disuelve muchísimas sustancias", "Produce energía al evaporarse"], "ans": 2, "exp": "El agua disuelve muchísimas sustancias, lo que la hace fundamental para transportar nutrientes y desechos en el organismo."}, {"q": "¿En qué tres procesos participan los iones según el resumen?", "opts": ["Fotosíntesis, respiración y digestión", "Impulso nervioso, coagulación de la sangre y regulación osmótica", "División celular, síntesis de proteínas y mutación", "Digestión, absorción y excreción"], "ans": 1, "exp": "Los iones participan en el IMPULSO NERVIOSO, la COAGULACIÓN DE LA SANGRE y la REGULACIÓN OSMÓTICA (equilibrio entre agua y sales)."}, {"q": "¿Qué son los cofactores y qué relación tienen con los iones?", "opts": ["Tipos de grasas que acompañan a los lípidos", "Proteínas que reemplazan a los iones", "Sustancias (en este caso iones) que ayudan a las enzimas a funcionar", "Gases que activan la respiración"], "ans": 2, "exp": "Los COFACTORES son sustancias que ayudan a las enzimas a funcionar. Muchos iones actúan como cofactores."}, {"q": "¿Cuál es la diferencia entre un anión y un catión?", "opts": ["El anión es sólido y el catión es gaseoso", "El anión tiene carga negativa y el catión tiene carga positiva", "El anión tiene carga positiva y el catión tiene carga negativa", "Son lo mismo, solo cambia el nombre"], "ans": 1, "exp": "ANIÓN = carga negativa (ganó electrones). CATIÓN = carga positiva (perdió electrones)."}, {"q": "¿Cuál de estos es un ejemplo de ANIÓN?", "opts": ["Sodio (Na⁺)", "Calcio (Ca²⁺)", "Potasio (K⁺)", "Fosfato (PO₄³⁻)"], "ans": 3, "exp": "El FOSFATO es un anión (carga negativa). Sodio, calcio y potasio son cationes (carga positiva)."}, {"q": "¿Cuáles son los tres gases biológicamente importantes del resumen?", "opts": ["Hidrógeno, helio y argón", "Vapor de agua, metano y ozono", "Oxígeno, dióxido de carbono y nitrógeno", "Oxígeno, hidrógeno y cloro"], "ans": 2, "exp": "Los gases importantes son OXÍGENO (O₂), DIÓXIDO DE CARBONO (CO₂) y NITRÓGENO (N₂)."}, {"q": "¿A qué temperatura hierve el agua y por qué es biológicamente importante?", "opts": ["A 0°C, para que el cuerpo no se enfríe", "A 100°C, lo que evita que se evapore fácilmente a temperatura corporal", "A 37°C, igual que la temperatura del cuerpo", "El punto de ebullición no tiene relevancia biológica"], "ans": 1, "exp": "El agua hierve a 100°C, una temperatura alta. Esto permite que el cuerpo funcione sin que el agua se evapore fácilmente, ayudando a mantener la temperatura interna."}, {"q": "¿Qué catión mencionado en el resumen participa en la coagulación de la sangre?", "opts": ["Sodio (Na⁺)", "Potasio (K⁺)", "Calcio (Ca²⁺)", "Amonio (NH₄⁺)"], "ans": 2, "exp": "El CALCIO (Ca²⁺) es el catión clave en la coagulación de la sangre, donde actúa como cofactor activando la cascada de reacciones que forman el coágulo."}];
-var cur=0,score=0,ans=[];
-var T=Q.length;
-function init(){cur=0;score=0;ans=[];
+var ALL=Q,cur=0,score=0,ans=[],T=Q.length,FALLIDAS=[],repaso=false;
+function init(set){
+  var usar=(set&&set.length)?set:ALL;
+  repaso=usar.length<ALL.length;
+  Q=usar;T=Q.length;cur=0;score=0;ans=[];
   document.getElementById('qcard').style.display='block';
   document.getElementById('res').className='results';render()}
 function render(){
   var q=Q[cur];
-  document.getElementById('qn').textContent='Pregunta '+(cur+1);
+  document.getElementById('qn').innerHTML=(repaso?'<span class="repaso-chip">🎯 Repaso de errores</span><br>':'')+'Pregunta '+(cur+1);
   document.getElementById('qt').textContent=q.q;
   document.getElementById('pt').textContent='Pregunta '+(cur+1)+' de '+T;
   document.getElementById('st').textContent=score+(score!==1?' correctas':' correcta');
@@ -160,18 +169,25 @@ function showRes(){
   document.getElementById('sr').style.setProperty('--pct',pct+'%');
   document.getElementById('sf').textContent=score+'/'+T;
   var ti,su;
-  if(score===T){ti='¡Perfecto! 🌟';su=''+T+'/'+T+'. ¡Lo tenés clavado!'}
+  if(score===T){ti=repaso?'¡Corregidas! 🌟':'¡Perfecto! 🌟';su=repaso?'Te salieron todas las que antes fallabas.':''+T+'/'+T+'. ¡Lo tenés clavado!'}
   else if(score>=T*.8){ti='¡Muy bien! 💪';su='Casi todo bien. Repasá las que fallaste.'}
   else if(score>=T*.6){ti='Bien, podés mejorar 📚';su='Más de la mitad bien. Vale repasar.'}
   else{ti='A repasar 😅';su='No te preocupes, con otro repaso va a quedar. 💜'}
   document.getElementById('rt').textContent=ti;document.getElementById('rs').textContent=su;
   var rl=document.getElementById('rl');rl.innerHTML='';
+  FALLIDAS=[];
   for(var i=0;i<ans.length;i++){
-    var a=ans[i];var d=document.createElement('div');d.className='ri '+(a.ok?'ok':'fail');
+    var a=ans[i];if(!a.ok)FALLIDAS.push(Q[i]);
+    var d=document.createElement('div');d.className='ri '+(a.ok?'ok':'fail');
     var h='<span class="rlab">'+(a.ok?'✅':'❌')+' P'+(i+1)+': '+a.q+'</span>';
     if(!a.ok)h+='<span class="rans">Tu respuesta: '+a.opts[a.chosen]+' · Correcta: '+a.opts[a.ans]+'</span>';
     d.innerHTML=h;rl.appendChild(d);
   }
+  var brev=document.getElementById('brev');
+  if(FALLIDAS.length){brev.className='br rev show';
+    brev.textContent='🎯 Repasar mis errores ('+FALLIDAS.length+')';}
+  else{brev.className='br rev';}
+  document.getElementById('bfull').textContent=repaso?'🔁 Hacer el examen completo':'🔁 Intentar de nuevo';
 }
 init();
 </script>

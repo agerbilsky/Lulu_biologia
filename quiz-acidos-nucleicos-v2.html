@@ -84,11 +84,17 @@ h1{font-size:clamp(24px,7vw,34px);font-weight:800;color:#fff;line-height:1.15;ma
 .br{width:100%;padding:15px;border-radius:13px;border:none;
   background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;
   font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;touch-action:manipulation}
+.br.rev{background:linear-gradient(135deg,var(--wrong),#fb923c);
+  margin-bottom:10px;display:none}
+.br.rev.show{display:block}
+.repaso-chip{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:#fb923c;background:rgba(251,146,60,.12);
+  border:1px solid rgba(251,146,60,.3);border-radius:99px;padding:3px 10px;margin-bottom:10px}
 </style>
 </head>
 <body>
 <header>
-  <a href="index.html" class="back">← Volver al inicio</a>
+  <a href="index.html?v=20260913" class="back">← Volver al inicio</a>
   <div class="eyebrow">Biología · Biomoléculas Orgánicas · Versión 2</div>
   <h1>🔬 Ácidos Nucleicos · V2</h1>
   <div class="tag-row"><span class="tag">🧬 ADN</span><span class="tag">📋 ARN</span><span class="tag">🔩 Nucleótidos</span></div>
@@ -110,19 +116,22 @@ h1{font-size:clamp(24px,7vw,34px);font-weight:800;color:#fff;line-height:1.15;ma
     <div class="sr" id="sr"><span class="sn" id="sf"></span></div>
     <h2 id="rt"></h2><p id="rs"></p>
     <div class="rl" id="rl"></div>
-    <button class="br" onclick="init()">🔁 Intentar de nuevo</button>
+    <button class="br rev" id="brev" onclick="init(FALLIDAS)">🎯 Repasar mis errores</button>
+    <button class="br" id="bfull" onclick="init()">🔁 Intentar de nuevo</button>
   </div>
 </div>
 <script>
 var Q=[{"q": "¿Qué elemento químico distingue a los ácidos nucleicos de los glúcidos y lípidos?", "opts": ["El carbono", "El fósforo (P)", "El hidrógeno", "El oxígeno"], "ans": 1, "exp": "El FÓSFORO (P) está presente en los ácidos nucleicos (en el grupo fosfato) y los distingue de glúcidos y lípidos, que solo tienen C, H y O."}, {"q": "¿Qué tipo de azúcar (pentosa) tiene el ADN?", "opts": ["Glucosa", "Ribosa", "Desoxirribosa", "Fructosa"], "ans": 2, "exp": "El ADN tiene DESOXIRRIBOSA. De ahí su nombre: ácido DESoxirribonucleico."}, {"q": "¿Qué significan las siglas ADN?", "opts": ["Ácido Doble Nucleico", "Ácido Desoxirribonucleico", "Azúcar De Nitrógeno", "Ácido Dinámico Nuclear"], "ans": 1, "exp": "ADN = Ácido DesoxirriboNucleico. En inglés es DNA."}, {"q": "¿Qué es un gen?", "opts": ["Un tipo de proteína", "Un fragmento de ADN con información para una característica", "Un azúcar del ADN", "Una organela celular"], "ans": 1, "exp": "Un GEN es un fragmento de ADN que contiene la información para una característica determinada del organismo."}, {"q": "¿Cuál de los dos ácidos nucleicos suele tener cadenas más largas?", "opts": ["El ARN", "El ADN (con millones de nucleótidos)", "Los dos son iguales", "Ninguno tiene cadenas largas"], "ans": 1, "exp": "El ADN tiene cadenas MUCHO más largas (millones de nucleótidos), mientras que el ARN tiene cientos o pocos miles."}, {"q": "¿Dónde se fabrican las proteínas, hasta donde llega el mensaje del ARN?", "opts": ["En el núcleo", "En los ribosomas (en el citoplasma)", "En las mitocondrias", "En la membrana"], "ans": 1, "exp": "El ARN lleva el mensaje del ADN hasta los RIBOSOMAS, que están en el citoplasma, donde se fabrican las proteínas."}, {"q": "¿Por qué el ADN se queda en el núcleo y manda al ARN a hacer el trabajo?", "opts": ["Porque el ADN no puede moverse y el ARN lleva las copias del mensaje al citoplasma", "Porque el ARN es más importante", "Porque el ADN no sirve para fabricar proteínas", "Porque el núcleo expulsa al ADN"], "ans": 0, "exp": "El ADN guarda la información en el núcleo de forma segura, y el ARN copia el mensaje y lo lleva al citoplasma para fabricar las proteínas."}, {"q": "El ATP, ¿qué tipo de molécula es?", "opts": ["Una proteína", "Un lípido de membrana", "Un nucleótido que almacena y libera energía", "Un azúcar simple"], "ans": 2, "exp": "El ATP es un NUCLEÓTIDO especial que funciona como la 'moneda energética' de la célula: almacena y libera energía."}, {"q": "Si una célula necesita energía rápida para una función, ¿a qué molécula recurre?", "opts": ["Al ADN", "Al ATP", "A la celulosa", "A los anticuerpos"], "ans": 1, "exp": "La célula recurre al ATP, que libera energía al romperse uno de sus enlaces, para las funciones que requieren energía."}, {"q": "¿Qué tienen en común el ADN y el ARN?", "opts": ["Ambos están solo en animales", "Ambos están formados por nucleótidos", "Ambos tienen desoxirribosa", "Ambos son proteínas"], "ans": 1, "exp": "Tanto el ADN como el ARN están formados por NUCLEÓTIDOS (pentosa + base nitrogenada + fosfato) y están en todos los seres vivos."}];
-var cur=0,score=0,ans=[];
-var T=Q.length;
-function init(){cur=0;score=0;ans=[];
+var ALL=Q,cur=0,score=0,ans=[],T=Q.length,FALLIDAS=[],repaso=false;
+function init(set){
+  var usar=(set&&set.length)?set:ALL;
+  repaso=usar.length<ALL.length;
+  Q=usar;T=Q.length;cur=0;score=0;ans=[];
   document.getElementById('qcard').style.display='block';
   document.getElementById('res').className='results';render()}
 function render(){
   var q=Q[cur];
-  document.getElementById('qn').textContent='Pregunta '+(cur+1);
+  document.getElementById('qn').innerHTML=(repaso?'<span class="repaso-chip">🎯 Repaso de errores</span><br>':'')+'Pregunta '+(cur+1);
   document.getElementById('qt').textContent=q.q;
   document.getElementById('pt').textContent='Pregunta '+(cur+1)+' de '+T;
   document.getElementById('st').textContent=score+(score!==1?' correctas':' correcta');
@@ -160,18 +169,25 @@ function showRes(){
   document.getElementById('sr').style.setProperty('--pct',pct+'%');
   document.getElementById('sf').textContent=score+'/'+T;
   var ti,su;
-  if(score===T){ti='¡Perfecto! 🌟';su=''+T+'/'+T+'. ¡Lo tenés clavado!'}
+  if(score===T){ti=repaso?'¡Corregidas! 🌟':'¡Perfecto! 🌟';su=repaso?'Te salieron todas las que antes fallabas.':''+T+'/'+T+'. ¡Lo tenés clavado!'}
   else if(score>=T*.8){ti='¡Muy bien! 💪';su='Casi todo bien. Repasá las que fallaste.'}
   else if(score>=T*.6){ti='Bien, podés mejorar 📚';su='Más de la mitad bien. Vale repasar.'}
   else{ti='A repasar 😅';su='No te preocupes, con otro repaso va a quedar. 💜'}
   document.getElementById('rt').textContent=ti;document.getElementById('rs').textContent=su;
   var rl=document.getElementById('rl');rl.innerHTML='';
+  FALLIDAS=[];
   for(var i=0;i<ans.length;i++){
-    var a=ans[i];var d=document.createElement('div');d.className='ri '+(a.ok?'ok':'fail');
+    var a=ans[i];if(!a.ok)FALLIDAS.push(Q[i]);
+    var d=document.createElement('div');d.className='ri '+(a.ok?'ok':'fail');
     var h='<span class="rlab">'+(a.ok?'✅':'❌')+' P'+(i+1)+': '+a.q+'</span>';
     if(!a.ok)h+='<span class="rans">Tu respuesta: '+a.opts[a.chosen]+' · Correcta: '+a.opts[a.ans]+'</span>';
     d.innerHTML=h;rl.appendChild(d);
   }
+  var brev=document.getElementById('brev');
+  if(FALLIDAS.length){brev.className='br rev show';
+    brev.textContent='🎯 Repasar mis errores ('+FALLIDAS.length+')';}
+  else{brev.className='br rev';}
+  document.getElementById('bfull').textContent=repaso?'🔁 Hacer el examen completo':'🔁 Intentar de nuevo';
 }
 init();
 </script>

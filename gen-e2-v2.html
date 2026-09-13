@@ -84,11 +84,17 @@ h1{font-size:clamp(24px,7vw,34px);font-weight:800;color:#fff;line-height:1.15;ma
 .br{width:100%;padding:15px;border-radius:13px;border:none;
   background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;
   font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;touch-action:manipulation}
+.br.rev{background:linear-gradient(135deg,var(--wrong),#fb923c);
+  margin-bottom:10px;display:none}
+.br.rev.show{display:block}
+.repaso-chip{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:#fb923c;background:rgba(251,146,60,.12);
+  border:1px solid rgba(251,146,60,.3);border-radius:99px;padding:3px 10px;margin-bottom:10px}
 </style>
 </head>
 <body>
 <header>
-  <a href="index.html" class="back">← Volver al inicio</a>
+  <a href="index.html?v=20260913" class="back">← Volver al inicio</a>
   <div class="eyebrow">Genética · Capítulos 3 y 4 · V2</div>
   <h1>🔤 Genes, genoma y bases nitrogenadas</h1>
   <div class="tag-row"><span class="tag">🧬 23 pares</span><span class="tag">🌍 Genoma</span><span class="tag">🔠 Complementariedad</span></div>
@@ -110,19 +116,22 @@ h1{font-size:clamp(24px,7vw,34px);font-weight:800;color:#fff;line-height:1.15;ma
     <div class="sr" id="sr"><span class="sn" id="sf"></span></div>
     <h2 id="rt"></h2><p id="rs"></p>
     <div class="rl" id="rl"></div>
-    <button class="br" onclick="init()">🔁 Intentar de nuevo</button>
+    <button class="br rev" id="brev" onclick="init(FALLIDAS)">🎯 Repasar mis errores</button>
+    <button class="br" id="bfull" onclick="init()">🔁 Intentar de nuevo</button>
   </div>
 </div>
 <script>
 var Q=[{"q": "¿Cuántos PARES de cromosomas homólogos tiene cada célula humana?", "opts": ["21", "22", "23", "46"], "ans": 2, "exp": "23 pares de cromosomas homólogos, que suman 46 cromosomas en total."}, {"q": "Si uno de los cromosomas de un par vino del papá, ¿de dónde vino el otro?", "opts": ["También del papá", "De un abuelo", "De la mamá", "De ninguno: se forma solo"], "ans": 2, "exp": "Por eso se llaman homólogos: uno viene del papá y el otro de la mamá."}, {"q": "Además de todos los genes, ¿qué más incluye el genoma?", "opts": ["Las proteínas ya fabricadas", "La información para construir y mantener el cuerpo", "Los ribosomas", "Las mitocondrias"], "ans": 1, "exp": "El genoma es todo el material genético: los genes MÁS la info para construir y mantener el cuerpo."}, {"q": "¿En qué caso dos personas pueden tener el mismo genoma?", "opts": ["Si son primos hermanos", "Si son hermanos", "Si son gemelos idénticos", "Nunca, en ningún caso"], "ans": 2, "exp": "Salvo que seas gemelo idéntico, tu genoma es único."}, {"q": "¿Qué es lo que determinan los genes?", "opts": ["La velocidad de la respiración celular", "La cantidad de mitocondrias", "El tamaño del núcleo", "Nuestras características"], "ans": 3, "exp": "Los genes son las unidades hereditarias que determinan nuestras características."}, {"q": "¿Cuáles son las cuatro bases nitrogenadas del ADN?", "opts": ["Adenina, uracilo, citosina y guanina", "Alanina, tirosina, citosina y glicina", "Adenina, timina, citosina y guanina", "Adenina, timina, cisteína y glucosa"], "ans": 2, "exp": "Las cuatro letras del ADN son adenina (A), timina (T), citosina (C) y guanina (G)."}, {"q": "La timina (T) siempre se une con…", "opts": ["Adenina (A)", "Guanina (G)", "Otra timina (T)", "Citosina (C)"], "ans": 0, "exp": "T se une con A. Es la misma regla A-T leída al revés."}, {"q": "La guanina (G) siempre se une con…", "opts": ["Timina (T)", "Otra guanina (G)", "Adenina (A)", "Citosina (C)"], "ans": 3, "exp": "G se une con C. Es la regla C-G leída al revés."}, {"q": "Si en una hebra de ADN la secuencia es A - C - G, ¿qué bases hay enfrente en la otra hebra?", "opts": ["T - A - G", "A - C - G", "C - T - A", "T - G - C"], "ans": 3, "exp": "Se aplica la complementariedad base por base: A→T, C→G y G→C. Queda T - G - C."}, {"q": "¿Qué podría pasar si las bases no se unieran siempre de forma correcta?", "opts": ["Las células nuevas podrían salir con errores", "El ADN saldría del núcleo", "La célula produciría más energía", "Se formarían más cromosomas sexuales"], "ans": 0, "exp": "Si la copia del ADN no es perfecta, las células nuevas podrían salir con errores."}, {"q": "¿Cuántos años duró el Proyecto del Genoma Humano?", "opts": ["3 años", "13 años", "23 años", "30 años"], "ans": 1, "exp": "Fue de 1990 a 2003, o sea 13 años."}, {"q": "¿Cuál de estas afirmaciones sobre el genoma humano es CORRECTA?", "opts": ["Tiene exactamente 46 genes", "Tiene entre 20.000 y 25.000 genes", "Tiene un gen por cada cromosoma", "Todavía no se sabe cuántos genes tiene"], "ans": 1, "exp": "Se calcula que el genoma humano tiene entre 20.000 y 25.000 genes."}];
-var cur=0,score=0,ans=[];
-var T=Q.length;
-function init(){cur=0;score=0;ans=[];
+var ALL=Q,cur=0,score=0,ans=[],T=Q.length,FALLIDAS=[],repaso=false;
+function init(set){
+  var usar=(set&&set.length)?set:ALL;
+  repaso=usar.length<ALL.length;
+  Q=usar;T=Q.length;cur=0;score=0;ans=[];
   document.getElementById('qcard').style.display='block';
   document.getElementById('res').className='results';render()}
 function render(){
   var q=Q[cur];
-  document.getElementById('qn').textContent='Pregunta '+(cur+1);
+  document.getElementById('qn').innerHTML=(repaso?'<span class="repaso-chip">🎯 Repaso de errores</span><br>':'')+'Pregunta '+(cur+1);
   document.getElementById('qt').textContent=q.q;
   document.getElementById('pt').textContent='Pregunta '+(cur+1)+' de '+T;
   document.getElementById('st').textContent=score+(score!==1?' correctas':' correcta');
@@ -160,18 +169,25 @@ function showRes(){
   document.getElementById('sr').style.setProperty('--pct',pct+'%');
   document.getElementById('sf').textContent=score+'/'+T;
   var ti,su;
-  if(score===T){ti='¡Perfecto! 🌟';su=''+T+'/'+T+'. ¡Lo tenés clavado!'}
+  if(score===T){ti=repaso?'¡Corregidas! 🌟':'¡Perfecto! 🌟';su=repaso?'Te salieron todas las que antes fallabas.':''+T+'/'+T+'. ¡Lo tenés clavado!'}
   else if(score>=T*.8){ti='¡Muy bien! 💪';su='Casi todo bien. Repasá las que fallaste.'}
   else if(score>=T*.6){ti='Bien, podés mejorar 📚';su='Más de la mitad bien. Vale repasar.'}
   else{ti='A repasar 😅';su='No te preocupes, con otro repaso va a quedar. 💜'}
   document.getElementById('rt').textContent=ti;document.getElementById('rs').textContent=su;
   var rl=document.getElementById('rl');rl.innerHTML='';
+  FALLIDAS=[];
   for(var i=0;i<ans.length;i++){
-    var a=ans[i];var d=document.createElement('div');d.className='ri '+(a.ok?'ok':'fail');
+    var a=ans[i];if(!a.ok)FALLIDAS.push(Q[i]);
+    var d=document.createElement('div');d.className='ri '+(a.ok?'ok':'fail');
     var h='<span class="rlab">'+(a.ok?'✅':'❌')+' P'+(i+1)+': '+a.q+'</span>';
     if(!a.ok)h+='<span class="rans">Tu respuesta: '+a.opts[a.chosen]+' · Correcta: '+a.opts[a.ans]+'</span>';
     d.innerHTML=h;rl.appendChild(d);
   }
+  var brev=document.getElementById('brev');
+  if(FALLIDAS.length){brev.className='br rev show';
+    brev.textContent='🎯 Repasar mis errores ('+FALLIDAS.length+')';}
+  else{brev.className='br rev';}
+  document.getElementById('bfull').textContent=repaso?'🔁 Hacer el examen completo':'🔁 Intentar de nuevo';
 }
 init();
 </script>

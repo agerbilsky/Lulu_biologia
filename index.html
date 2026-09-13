@@ -95,7 +95,7 @@ footer strong{color:rgba(167,139,250,.8)}
     <span class="dna-icon">🧬</span>
     <div class="hero-label">Biología · 3er año</div>
     <h1><span class="grad">Quizzes<br>de Lulú</span></h1>
-    <p>Dos unidades completas: Biomoléculas y Célula, y Genética y División Celular.</p>
+    <p>Dos unidades completas. Cada una con dos versiones de preguntas.</p>
     <div class="stats">
       <div class="stat"><div class="stat-num">29</div><div class="stat-lbl">exámenes</div></div>
       <div class="stat"><div class="stat-num">340</div><div class="stat-lbl">preguntas</div></div>
@@ -104,49 +104,38 @@ footer strong{color:rgba(167,139,250,.8)}
   </div>
 
   <div class="tabs">
-    <button class="tab active" onclick="switchVer(1)">📘 Versión 1</button>
-    <button class="tab" onclick="switchVer(2)">📗 Versión 2</button>
-    <button class="tab" onclick="switchVer(3)">🧬 Genética</button>
+    <button class="tab active" onclick="switchVer(1)">🔬 Biomoléculas y Células</button>
+    <button class="tab" onclick="switchVer(2)">🧬 Genética</button>
   </div>
 
-  <!-- ════════ VERSIÓN 1 ════════ -->
+  <!-- ════════ BIOMOLÉCULAS Y CÉLULAS ════════ -->
   <div class="version active" id="v1">
-    <div class="sec-label"><span>🔬 Biomoléculas</span></div>
+    <div class="sec-label"><span>📘 Versión 1 · 12 preguntas c/u</span></div>
     <div class="grid">
       <a href="quiz-inorganicas.html?v=20260913" class="qc t1"><div class="qc-top"><div class="qc-icon">💧</div><span class="qc-badge">12 preg.</span></div><div class="qc-name">Biomoléculas Inorgánicas</div><div class="qc-desc">Agua, iones, gases, aniones y cationes.</div><div class="qc-footer"><div class="qc-pills"><span class="pill">Agua</span><span class="pill">Iones</span></div><span class="qc-arr">›</span></div></a>
       <a href="quiz-proteinas.html?v=20260913" class="qc t2"><div class="qc-top"><div class="qc-icon">🧬</div><span class="qc-badge">12 preg.</span></div><div class="qc-name">Proteínas</div><div class="qc-desc">Aminoácidos, 4 estructuras y 7 funciones.</div><div class="qc-footer"><div class="qc-pills"><span class="pill">Estructura</span><span class="pill">Funciones</span></div><span class="qc-arr">›</span></div></a>
       <a href="quiz-glucidos.html?v=20260913" class="qc t3"><div class="qc-top"><div class="qc-icon">🍬</div><span class="qc-badge">12 preg.</span></div><div class="qc-name">Glúcidos</div><div class="qc-desc">Mono, di y polisacáridos. Funciones.</div><div class="qc-footer"><div class="qc-pills"><span class="pill">Azúcares</span><span class="pill">Energía</span></div><span class="qc-arr">›</span></div></a>
       <a href="quiz-lipidos.html?v=20260913" class="qc t4"><div class="qc-top"><div class="qc-icon">🫧</div><span class="qc-badge">12 preg.</span></div><div class="qc-name">Lípidos</div><div class="qc-desc">Clasificación, funciones y membranas.</div><div class="qc-footer"><div class="qc-pills"><span class="pill">Grasas</span><span class="pill">Membrana</span></div><span class="qc-arr">›</span></div></a>
-      <a href="quiz-acidos-nucleicos.html?v=20260913" class="qc t5 wide"><div class="qc-top"><div class="qc-icon">🔬</div><span class="qc-badge">12 preg.</span></div><div class="qc-name">Ácidos Nucleicos</div><div class="qc-desc">ADN, ARN, nucleótidos y ATP.</div><div class="qc-footer"><div class="qc-pills"><span class="pill">ADN</span><span class="pill">ARN</span><span class="pill">ATP</span></div><span class="qc-arr">›</span></div></a>
-    </div>
-    <div class="sec-label"><span>🦠 Célula</span></div>
-    <div class="grid two">
-      <a href="quiz-componentes-celula.html?v=20260913" class="qc t6 wide"><div class="qc-top"><div class="qc-icon">🔩</div><span class="qc-badge">12 preg.</span></div><div class="qc-name">Componentes Comunes a Todas las Células</div><div class="qc-desc">Membrana, citoplasma, ribosomas y funciones vitales.</div><div class="qc-footer"><div class="qc-pills"><span class="pill">Membrana</span><span class="pill">Forma</span></div><span class="qc-arr">›</span></div></a>
+      <a href="quiz-acidos-nucleicos.html?v=20260913" class="qc t5"><div class="qc-top"><div class="qc-icon">🔬</div><span class="qc-badge">12 preg.</span></div><div class="qc-name">Ácidos Nucleicos</div><div class="qc-desc">ADN, ARN, nucleótidos y ATP.</div><div class="qc-footer"><div class="qc-pills"><span class="pill">ADN</span><span class="pill">ARN</span><span class="pill">ATP</span></div><span class="qc-arr">›</span></div></a>
+      <a href="quiz-componentes-celula.html?v=20260913" class="qc t6"><div class="qc-top"><div class="qc-icon">🔩</div><span class="qc-badge">12 preg.</span></div><div class="qc-name">Componentes Comunes a Todas las Células</div><div class="qc-desc">Membrana, citoplasma, ribosomas y funciones vitales.</div><div class="qc-footer"><div class="qc-pills"><span class="pill">Membrana</span><span class="pill">Forma</span></div><span class="qc-arr">›</span></div></a>
       <a href="quiz-procariotas.html?v=20260913" class="qc t7"><div class="qc-top"><div class="qc-icon">🦠</div><span class="qc-badge">12 preg.</span></div><div class="qc-name">Células Procariotas</div><div class="qc-desc">Bacterias, ADN circular y flagelo.</div><div class="qc-footer"><div class="qc-pills"><span class="pill">Bacterias</span></div><span class="qc-arr">›</span></div></a>
       <a href="quiz-eucariotas.html?v=20260913" class="qc t8"><div class="qc-top"><div class="qc-icon">🔬</div><span class="qc-badge">12 preg.</span></div><div class="qc-name">Células Eucariotas</div><div class="qc-desc">Organelas, animal vs vegetal.</div><div class="qc-footer"><div class="qc-pills"><span class="pill">Animal</span><span class="pill">Vegetal</span></div><span class="qc-arr">›</span></div></a>
     </div>
-  </div>
-
-  <!-- ════════ VERSIÓN 2 ════════ -->
-  <div class="version" id="v2">
-    <div class="sec-label"><span>🔬 Biomoléculas</span></div>
+    <div class="sec-label"><span>📗 Versión 2 · preguntas nuevas</span></div>
     <div class="grid">
       <a href="quiz-inorganicas-v2.html?v=20260913" class="qc t1"><div class="qc-top"><div class="qc-icon">💧</div><span class="qc-badge">10 preg.</span></div><div class="qc-name">Biomoléculas Inorgánicas</div><div class="qc-desc">Nuevas preguntas: disolvente universal, osmosis y más.</div><div class="qc-footer"><div class="qc-pills"><span class="pill">Agua</span><span class="pill">Iones</span></div><span class="qc-arr">›</span></div></a>
       <a href="quiz-proteinas-v2.html?v=20260913" class="qc t2"><div class="qc-top"><div class="qc-icon">🧬</div><span class="qc-badge">10 preg.</span></div><div class="qc-name">Proteínas</div><div class="qc-desc">Nuevas preguntas: enlaces, desnaturalización, anticuerpos.</div><div class="qc-footer"><div class="qc-pills"><span class="pill">Estructura</span><span class="pill">Funciones</span></div><span class="qc-arr">›</span></div></a>
       <a href="quiz-glucidos-v2.html?v=20260913" class="qc t3"><div class="qc-top"><div class="qc-icon">🍬</div><span class="qc-badge">10 preg.</span></div><div class="qc-name">Glúcidos</div><div class="qc-desc">Nuevas preguntas: hidratos de carbono, glucógeno, fibra.</div><div class="qc-footer"><div class="qc-pills"><span class="pill">Azúcares</span><span class="pill">Energía</span></div><span class="qc-arr">›</span></div></a>
       <a href="quiz-lipidos-v2.html?v=20260913" class="qc t4"><div class="qc-top"><div class="qc-icon">🫧</div><span class="qc-badge">10 preg.</span></div><div class="qc-name">Lípidos</div><div class="qc-desc">Nuevas preguntas: triglicéridos, colesterol, ceras.</div><div class="qc-footer"><div class="qc-pills"><span class="pill">Grasas</span><span class="pill">Membrana</span></div><span class="qc-arr">›</span></div></a>
-      <a href="quiz-acidos-nucleicos-v2.html?v=20260913" class="qc t5 wide"><div class="qc-top"><div class="qc-icon">🔬</div><span class="qc-badge">10 preg.</span></div><div class="qc-name">Ácidos Nucleicos</div><div class="qc-desc">Nuevas preguntas: genes, desoxirribosa, ATP energía.</div><div class="qc-footer"><div class="qc-pills"><span class="pill">ADN</span><span class="pill">ARN</span><span class="pill">ATP</span></div><span class="qc-arr">›</span></div></a>
-    </div>
-    <div class="sec-label"><span>🦠 Célula</span></div>
-    <div class="grid two">
-      <a href="quiz-componentes-celula-v2.html?v=20260913" class="qc t6 wide"><div class="qc-top"><div class="qc-icon">🔩</div><span class="qc-badge">10 preg.</span></div><div class="qc-name">Componentes Comunes a Todas las Células</div><div class="qc-desc">Nuevas preguntas: funciones vitales, forma y función.</div><div class="qc-footer"><div class="qc-pills"><span class="pill">Membrana</span><span class="pill">Forma</span></div><span class="qc-arr">›</span></div></a>
+      <a href="quiz-acidos-nucleicos-v2.html?v=20260913" class="qc t5"><div class="qc-top"><div class="qc-icon">🔬</div><span class="qc-badge">10 preg.</span></div><div class="qc-name">Ácidos Nucleicos</div><div class="qc-desc">Nuevas preguntas: genes, desoxirribosa, ATP energía.</div><div class="qc-footer"><div class="qc-pills"><span class="pill">ADN</span><span class="pill">ARN</span><span class="pill">ATP</span></div><span class="qc-arr">›</span></div></a>
+      <a href="quiz-componentes-celula-v2.html?v=20260913" class="qc t6"><div class="qc-top"><div class="qc-icon">🔩</div><span class="qc-badge">10 preg.</span></div><div class="qc-name">Componentes Comunes a Todas las Células</div><div class="qc-desc">Nuevas preguntas: funciones vitales, forma y función.</div><div class="qc-footer"><div class="qc-pills"><span class="pill">Membrana</span><span class="pill">Forma</span></div><span class="qc-arr">›</span></div></a>
       <a href="quiz-procariotas-v2.html?v=20260913" class="qc t7"><div class="qc-top"><div class="qc-icon">🦠</div><span class="qc-badge">10 preg.</span></div><div class="qc-name">Células Procariotas</div><div class="qc-desc">Nuevas preguntas: evolución, pili, simplicidad.</div><div class="qc-footer"><div class="qc-pills"><span class="pill">Bacterias</span></div><span class="qc-arr">›</span></div></a>
       <a href="quiz-eucariotas-v2.html?v=20260913" class="qc t8"><div class="qc-top"><div class="qc-icon">🔬</div><span class="qc-badge">10 preg.</span></div><div class="qc-name">Células Eucariotas</div><div class="qc-desc">Nuevas preguntas: carioteca, Golgi, lisosomas.</div><div class="qc-footer"><div class="qc-pills"><span class="pill">Animal</span><span class="pill">Vegetal</span></div><span class="qc-arr">›</span></div></a>
     </div>
   </div>
 
   <!-- ════════ GENÉTICA Y DIVISIÓN CELULAR ════════ -->
-  <div class="version" id="v3">
+  <div class="version" id="v2">
     <div class="sec-label"><span>🧬 Versión 1 · por capítulos</span></div>
     <div class="grid">
       <a href="gen-e1.html?v=20260913" class="qc t1"><div class="qc-top"><div class="qc-icon">🪜</div><span class="qc-badge">12 preg.</span></div><div class="qc-name">1. Niveles de organización y ADN</div><div class="qc-desc">De átomos a biosfera, dónde vive el ADN y qué es la cromatina.</div><div class="qc-footer"><div class="qc-pills"><span class="pill">Niveles</span><span class="pill">ADN</span></div><span class="qc-arr">›</span></div></a>

@@ -84,11 +84,17 @@ h1{font-size:clamp(24px,7vw,34px);font-weight:800;color:#fff;line-height:1.15;ma
 .br{width:100%;padding:15px;border-radius:13px;border:none;
   background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;
   font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;touch-action:manipulation}
+.br.rev{background:linear-gradient(135deg,var(--wrong),#fb923c);
+  margin-bottom:10px;display:none}
+.br.rev.show{display:block}
+.repaso-chip{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:#fb923c;background:rgba(251,146,60,.12);
+  border:1px solid rgba(251,146,60,.3);border-radius:99px;padding:3px 10px;margin-bottom:10px}
 </style>
 </head>
 <body>
 <header>
-  <a href="index.html" class="back">← Volver al inicio</a>
+  <a href="index.html?v=20260913" class="back">← Volver al inicio</a>
   <div class="eyebrow">Genética · Capítulos 11 y 12</div>
   <h1>👫 Cromosomas sexuales y trisomías</h1>
   <div class="tag-row"><span class="tag">👥 XX y XY</span><span class="tag">🧮 Cariotipo</span><span class="tag">3️⃣ Trisomías</span></div>
@@ -110,19 +116,22 @@ h1{font-size:clamp(24px,7vw,34px);font-weight:800;color:#fff;line-height:1.15;ma
     <div class="sr" id="sr"><span class="sn" id="sf"></span></div>
     <h2 id="rt"></h2><p id="rs"></p>
     <div class="rl" id="rl"></div>
-    <button class="br" onclick="init()">🔁 Intentar de nuevo</button>
+    <button class="br rev" id="brev" onclick="init(FALLIDAS)">🎯 Repasar mis errores</button>
+    <button class="br" id="bfull" onclick="init()">🔁 Intentar de nuevo</button>
   </div>
 </div>
 <script>
 var Q=[{"q": "De los 23 pares de cromosomas humanos, ¿cuántos son autosomas?", "opts": ["21", "22", "23", "46"], "ans": 1, "exp": "22 pares son AUTOSOMAS (no determinan el sexo) y 1 par es sexual."}, {"q": "¿Qué determina el par sexual?", "opts": ["El grupo sanguíneo", "Si la persona es mujer o varón", "El color de ojos", "La cantidad total de genes"], "ans": 1, "exp": "El par sexual es el que define si la persona es mujer o varón. Los 22 pares de autosomas NO determinan el sexo."}, {"q": "¿Cuáles son los cromosomas sexuales de la mujer?", "opts": ["XXY", "XX", "YY", "XY"], "ans": 1, "exp": "Mujer: XX. Varón: XY."}, {"q": "¿Y los del varón?", "opts": ["XX", "X solo", "XY", "XXY"], "ans": 2, "exp": "Varón: XY. Mujer: XX."}, {"q": "¿Cuántos cromosomas aporta cada célula sexual en la fecundación?", "opts": ["El óvulo 23 y el espermatozoide 46", "El óvulo 46 y el espermatozoide 46", "El óvulo 23 y el espermatozoide 23", "El óvulo 22 y el espermatozoide 24"], "ans": 2, "exp": "El óvulo aporta 23 cromosomas y el espermatozoide otros 23: entre los dos completan los 46."}, {"q": "¿Cuál de estas enfermedades está ligada a los cromosomas sexuales?", "opts": ["El asma", "La fibrosis quística", "La diabetes", "La hemofilia"], "ans": 3, "exp": "La hemofilia y el daltonismo son los ejemplos clásicos de enfermedades ligadas al par sexual."}, {"q": "El daltonismo es un ejemplo de enfermedad ligada a…", "opts": ["Los cromosomas sexuales", "El par 21", "El par 18", "El ambiente solamente"], "ans": 0, "exp": "El daltonismo, igual que la hemofilia, está ligado a los cromosomas sexuales."}, {"q": "¿Qué es una TRISOMÍA?", "opts": ["Cuando, en vez de 2 copias de un cromosoma, la persona tiene 3", "Cuando hay tres pares sexuales", "Cuando un gen se copia tres veces", "Cuando falta un cromosoma del par"], "ans": 0, "exp": "Una trisomía es cuando, en lugar de tener un par (2 copias) de un cromosoma, la persona tiene 3 copias."}, {"q": "La trisomía del par 21 corresponde al…", "opts": ["Síndrome de Down", "Síndrome de Klinefelter", "Síndrome de Edwards", "Daltonismo"], "ans": 0, "exp": "Par 21 → Síndrome de Down."}, {"q": "La trisomía del par 18 corresponde al…", "opts": ["Síndrome de Klinefelter", "Hemofilia", "Síndrome de Down", "Síndrome de Edwards"], "ans": 3, "exp": "Par 18 → Síndrome de Edwards."}, {"q": "El síndrome de Klinefelter (XXY), ¿a qué par afecta?", "opts": ["Al par 13", "Al par 21", "Al par sexual", "Al par 18"], "ans": 2, "exp": "Klinefelter es una trisomía del PAR SEXUAL: XXY, con un cromosoma de más."}, {"q": "¿Cómo se compone el cariotipo humano?", "opts": ["46 pares de cromosomas = 92 cromosomas", "22 pares de autosomas + 1 par sexual = 46 cromosomas", "23 pares de autosomas = 46 cromosomas", "21 pares de autosomas + 2 pares sexuales = 46 cromosomas"], "ans": 1, "exp": "El cariotipo humano son 22 pares de autosomas + 1 par sexual = 46 cromosomas en total."}];
-var cur=0,score=0,ans=[];
-var T=Q.length;
-function init(){cur=0;score=0;ans=[];
+var ALL=Q,cur=0,score=0,ans=[],T=Q.length,FALLIDAS=[],repaso=false;
+function init(set){
+  var usar=(set&&set.length)?set:ALL;
+  repaso=usar.length<ALL.length;
+  Q=usar;T=Q.length;cur=0;score=0;ans=[];
   document.getElementById('qcard').style.display='block';
   document.getElementById('res').className='results';render()}
 function render(){
   var q=Q[cur];
-  document.getElementById('qn').textContent='Pregunta '+(cur+1);
+  document.getElementById('qn').innerHTML=(repaso?'<span class="repaso-chip">🎯 Repaso de errores</span><br>':'')+'Pregunta '+(cur+1);
   document.getElementById('qt').textContent=q.q;
   document.getElementById('pt').textContent='Pregunta '+(cur+1)+' de '+T;
   document.getElementById('st').textContent=score+(score!==1?' correctas':' correcta');
@@ -160,18 +169,25 @@ function showRes(){
   document.getElementById('sr').style.setProperty('--pct',pct+'%');
   document.getElementById('sf').textContent=score+'/'+T;
   var ti,su;
-  if(score===T){ti='¡Perfecto! 🌟';su=''+T+'/'+T+'. ¡Lo tenés clavado!'}
+  if(score===T){ti=repaso?'¡Corregidas! 🌟':'¡Perfecto! 🌟';su=repaso?'Te salieron todas las que antes fallabas.':''+T+'/'+T+'. ¡Lo tenés clavado!'}
   else if(score>=T*.8){ti='¡Muy bien! 💪';su='Casi todo bien. Repasá las que fallaste.'}
   else if(score>=T*.6){ti='Bien, podés mejorar 📚';su='Más de la mitad bien. Vale repasar.'}
   else{ti='A repasar 😅';su='No te preocupes, con otro repaso va a quedar. 💜'}
   document.getElementById('rt').textContent=ti;document.getElementById('rs').textContent=su;
   var rl=document.getElementById('rl');rl.innerHTML='';
+  FALLIDAS=[];
   for(var i=0;i<ans.length;i++){
-    var a=ans[i];var d=document.createElement('div');d.className='ri '+(a.ok?'ok':'fail');
+    var a=ans[i];if(!a.ok)FALLIDAS.push(Q[i]);
+    var d=document.createElement('div');d.className='ri '+(a.ok?'ok':'fail');
     var h='<span class="rlab">'+(a.ok?'✅':'❌')+' P'+(i+1)+': '+a.q+'</span>';
     if(!a.ok)h+='<span class="rans">Tu respuesta: '+a.opts[a.chosen]+' · Correcta: '+a.opts[a.ans]+'</span>';
     d.innerHTML=h;rl.appendChild(d);
   }
+  var brev=document.getElementById('brev');
+  if(FALLIDAS.length){brev.className='br rev show';
+    brev.textContent='🎯 Repasar mis errores ('+FALLIDAS.length+')';}
+  else{brev.className='br rev';}
+  document.getElementById('bfull').textContent=repaso?'🔁 Hacer el examen completo':'🔁 Intentar de nuevo';
 }
 init();
 </script>

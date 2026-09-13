@@ -84,11 +84,17 @@ h1{font-size:clamp(24px,7vw,34px);font-weight:800;color:#fff;line-height:1.15;ma
 .br{width:100%;padding:15px;border-radius:13px;border:none;
   background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;
   font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;touch-action:manipulation}
+.br.rev{background:linear-gradient(135deg,var(--wrong),#fb923c);
+  margin-bottom:10px;display:none}
+.br.rev.show{display:block}
+.repaso-chip{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:#fb923c;background:rgba(251,146,60,.12);
+  border:1px solid rgba(251,146,60,.3);border-radius:99px;padding:3px 10px;margin-bottom:10px}
 </style>
 </head>
 <body>
 <header>
-  <a href="index.html" class="back">← Volver al inicio</a>
+  <a href="index.html?v=20260913" class="back">← Volver al inicio</a>
   <div class="eyebrow">Genética · Integrador · Capítulos 1 a 12</div>
   <h1>🏁 Integrador de toda la unidad</h1>
   <div class="tag-row"><span class="tag">🧬 12 capítulos</span><span class="tag">🏁 20 preguntas</span><span class="tag">📝 Simulacro</span></div>
@@ -110,19 +116,22 @@ h1{font-size:clamp(24px,7vw,34px);font-weight:800;color:#fff;line-height:1.15;ma
     <div class="sr" id="sr"><span class="sn" id="sf"></span></div>
     <h2 id="rt"></h2><p id="rs"></p>
     <div class="rl" id="rl"></div>
-    <button class="br" onclick="init()">🔁 Intentar de nuevo</button>
+    <button class="br rev" id="brev" onclick="init(FALLIDAS)">🎯 Repasar mis errores</button>
+    <button class="br" id="bfull" onclick="init()">🔁 Intentar de nuevo</button>
   </div>
 </div>
 <script>
 var Q=[{"q": "¿Cuál de estas secuencias respeta el orden de los niveles de organización?", "opts": ["Átomo → biomolécula → célula → tejido → órgano", "Tejido → célula → órgano → biomolécula", "Célula → biomolécula → tejido → átomo", "Molécula → átomo → célula → tejido"], "ans": 0, "exp": "El orden va de lo más chico a lo más grande: átomos → moléculas → biomoléculas → célula → tejido → órgano → sistema."}, {"q": "¿Cuál es la diferencia principal entre una célula procariota y una eucariota respecto del ADN?", "opts": ["La procariota no tiene ADN", "En la procariota el ADN está suelto en el citoplasma; en la eucariota, dentro del núcleo", "La eucariota tiene el ADN fuera de la célula", "En la eucariota el ADN está en las mitocondrias únicamente"], "ans": 1, "exp": "Las dos tienen ADN. La diferencia es dónde está guardado: citoplasma en procariotas, núcleo en eucariotas."}, {"q": "¿Qué nombre recibe la cromatina cuando se condensa para la división celular?", "opts": ["Genoma", "Cromosoma", "Histona", "Codón"], "ans": 1, "exp": "Condensada y con forma de bastón, la cromatina se llama CROMOSOMA."}, {"q": "¿Cuántos cromosomas tiene una célula humana común y cuántos una célula sexual?", "opts": ["46 y 46", "46 y 23", "23 y 23", "23 y 46"], "ans": 1, "exp": "Una célula común tiene 46 (23 pares). Las sexuales, formadas por meiosis, tienen 23."}, {"q": "¿Cuántos genes se calcula que tiene el genoma humano?", "opts": ["Entre 2.000 y 2.500", "Entre 20.000 y 25.000", "Entre 200 y 250", "Entre 200.000 y 250.000"], "ans": 1, "exp": "Entre 20.000 y 25.000 genes."}, {"q": "¿Cuáles son las dos únicas uniones posibles entre bases nitrogenadas?", "opts": ["A-G y C-T", "A-C y T-G", "A-A y C-C", "A-T y C-G"], "ans": 3, "exp": "A se une siempre con T, y C siempre con G. Sin excepciones."}, {"q": "¿Dónde ocurre la transcripción y qué enzima la realiza?", "opts": ["En el citoplasma, la ARN polimerasa", "En la mitocondria, una histona", "En el ribosoma, la amilasa", "En el núcleo, la ARN polimerasa"], "ans": 3, "exp": "La transcripción ocurre en el NÚCLEO y la hace la ARN POLIMERASA."}, {"q": "¿Cuál es la diferencia entre exones e intrones?", "opts": ["Los exones se traducen y forman la proteína; los intrones se eliminan", "Los intrones se traducen y los exones se eliminan", "Los exones están en el ADN y los intrones en el ARNt", "Los dos se traducen por igual"], "ans": 0, "exp": "Exones = se traducen y forman la proteína. Intrones = se eliminan en el procesamiento."}, {"q": "¿Qué ARN transporta los aminoácidos hasta el ribosoma?", "opts": ["La ARN polimerasa", "El ARNr", "El ARNt", "El ARNm"], "ans": 2, "exp": "El ARN de transferencia (ARNt) lleva los aminoácidos al ribosoma."}, {"q": "¿Dónde ocurre la traducción?", "opts": ["En la membrana celular", "En los cromosomas", "En el núcleo", "En los ribosomas, en el citoplasma"], "ans": 3, "exp": "En los ribosomas, que están en el citoplasma."}, {"q": "El codón y el anticodón, ¿de cuántas bases están formados cada uno?", "opts": ["De 3", "De 20", "De 2", "De 4"], "ans": 0, "exp": "Los dos son tríos de bases: el codón está en el ARNm y el anticodón en el ARNt, y encastran entre sí."}, {"q": "Una célula del hígado y una neurona tienen el mismo ADN. ¿Qué explica que sean distintas?", "opts": ["Que una es procariota", "Que la del hígado perdió parte de su ADN", "Que la neurona tiene más cromosomas", "La expresión génica: cada una activa los genes que necesita"], "ans": 3, "exp": "Todas tienen el mismo libro de instrucciones, pero leen capítulos distintos. Eso es la EXPRESIÓN GÉNICA."}, {"q": "¿Por qué hoy se prefiere decir «un gen, una proteína»?", "opts": ["Porque las enzimas no vienen de los genes", "Porque las proteínas no se fabrican en los ribosomas", "Porque un gen fabrica siempre una sola proteína", "Porque no todas las proteínas son enzimas, así que decir «enzima» se queda corto"], "ans": 3, "exp": "Hay proteínas estructurales, de transporte y defensivas. «Enzima» deja afuera un montón."}, {"q": "¿Cuál es la fórmula correcta?", "opts": ["Fenotipo = Genotipo + Ambiente", "Genotipo = Fenotipo + Ambiente", "Fenotipo = Genotipo − Ambiente", "Ambiente = Fenotipo + Genotipo"], "ans": 0, "exp": "Fenotipo = Genotipo + Ambiente."}, {"q": "¿Cuál de estos casos es el ejemplo de «predisposición genética + mucha influencia del ambiente»?", "opts": ["El síndrome de Down", "La trisomía del par 18", "El asma", "La fibrosis quística"], "ans": 2, "exp": "El asma: el genotipo da la predisposición y el ambiente (humo, polvo, contaminación) influye mucho."}, {"q": "¿Cuál es el resultado de la MITOSIS?", "opts": ["4 células haploides", "2 células diploides idénticas a la original", "2 células haploides", "4 células diploides"], "ans": 1, "exp": "La mitosis: 1 división → 2 células diploides idénticas entre sí y a la original."}, {"q": "¿Cuál es el resultado de la MEIOSIS y con qué reproducción se relaciona?", "opts": ["4 células haploides · reproducción sexual", "4 células diploides · reproducción sexual", "2 células diploides · reproducción asexual", "2 células haploides · reproducción asexual"], "ans": 0, "exp": "Meiosis: 2 divisiones → 4 células haploides. Es la de la reproducción sexual."}, {"q": "¿Qué diferencia hay entre una célula diploide y una haploide?", "opts": ["La diploide no tiene núcleo", "La haploide tiene el doble de cromosomas", "La diploide tiene los dos juegos de cromosomas y la haploide uno solo", "La haploide solo existe en procariotas"], "ans": 2, "exp": "Diploide = los dos juegos (par completo). Haploide = un solo juego, la mitad."}, {"q": "Una persona heterocigota (Aa), ¿qué alelo expresa?", "opts": ["El recesivo", "Ninguno de los dos", "El dominante", "Los dos a la vez"], "ans": 2, "exp": "En una heterocigota se expresa el DOMINANTE. El recesivo necesita las dos copias (aa)."}, {"q": "¿Qué tienen en común el síndrome de Down, el de Edwards y el de Klinefelter?", "opts": ["Los tres se heredan solo del papá", "Los tres afectan al par 21", "Los tres son trisomías: hay 3 copias de un cromosoma en vez de 2", "Los tres afectan al par sexual"], "ans": 2, "exp": "Los tres son TRISOMÍAS. Down = par 21, Edwards = par 18, Klinefelter = par sexual (XXY)."}];
-var cur=0,score=0,ans=[];
-var T=Q.length;
-function init(){cur=0;score=0;ans=[];
+var ALL=Q,cur=0,score=0,ans=[],T=Q.length,FALLIDAS=[],repaso=false;
+function init(set){
+  var usar=(set&&set.length)?set:ALL;
+  repaso=usar.length<ALL.length;
+  Q=usar;T=Q.length;cur=0;score=0;ans=[];
   document.getElementById('qcard').style.display='block';
   document.getElementById('res').className='results';render()}
 function render(){
   var q=Q[cur];
-  document.getElementById('qn').textContent='Pregunta '+(cur+1);
+  document.getElementById('qn').innerHTML=(repaso?'<span class="repaso-chip">🎯 Repaso de errores</span><br>':'')+'Pregunta '+(cur+1);
   document.getElementById('qt').textContent=q.q;
   document.getElementById('pt').textContent='Pregunta '+(cur+1)+' de '+T;
   document.getElementById('st').textContent=score+(score!==1?' correctas':' correcta');
@@ -160,18 +169,25 @@ function showRes(){
   document.getElementById('sr').style.setProperty('--pct',pct+'%');
   document.getElementById('sf').textContent=score+'/'+T;
   var ti,su;
-  if(score===T){ti='¡Perfecto! 🌟';su=''+T+'/'+T+'. ¡Lo tenés clavado!'}
+  if(score===T){ti=repaso?'¡Corregidas! 🌟':'¡Perfecto! 🌟';su=repaso?'Te salieron todas las que antes fallabas.':''+T+'/'+T+'. ¡Lo tenés clavado!'}
   else if(score>=T*.8){ti='¡Muy bien! 💪';su='Casi todo bien. Repasá las que fallaste.'}
   else if(score>=T*.6){ti='Bien, podés mejorar 📚';su='Más de la mitad bien. Vale repasar.'}
   else{ti='A repasar 😅';su='No te preocupes, con otro repaso va a quedar. 💜'}
   document.getElementById('rt').textContent=ti;document.getElementById('rs').textContent=su;
   var rl=document.getElementById('rl');rl.innerHTML='';
+  FALLIDAS=[];
   for(var i=0;i<ans.length;i++){
-    var a=ans[i];var d=document.createElement('div');d.className='ri '+(a.ok?'ok':'fail');
+    var a=ans[i];if(!a.ok)FALLIDAS.push(Q[i]);
+    var d=document.createElement('div');d.className='ri '+(a.ok?'ok':'fail');
     var h='<span class="rlab">'+(a.ok?'✅':'❌')+' P'+(i+1)+': '+a.q+'</span>';
     if(!a.ok)h+='<span class="rans">Tu respuesta: '+a.opts[a.chosen]+' · Correcta: '+a.opts[a.ans]+'</span>';
     d.innerHTML=h;rl.appendChild(d);
   }
+  var brev=document.getElementById('brev');
+  if(FALLIDAS.length){brev.className='br rev show';
+    brev.textContent='🎯 Repasar mis errores ('+FALLIDAS.length+')';}
+  else{brev.className='br rev';}
+  document.getElementById('bfull').textContent=repaso?'🔁 Hacer el examen completo':'🔁 Intentar de nuevo';
 }
 init();
 </script>

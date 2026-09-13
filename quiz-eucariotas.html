@@ -84,11 +84,17 @@ h1{font-size:clamp(24px,7vw,34px);font-weight:800;color:#fff;line-height:1.15;ma
 .br{width:100%;padding:15px;border-radius:13px;border:none;
   background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;
   font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;touch-action:manipulation}
+.br.rev{background:linear-gradient(135deg,var(--wrong),#fb923c);
+  margin-bottom:10px;display:none}
+.br.rev.show{display:block}
+.repaso-chip{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:#fb923c;background:rgba(251,146,60,.12);
+  border:1px solid rgba(251,146,60,.3);border-radius:99px;padding:3px 10px;margin-bottom:10px}
 </style>
 </head>
 <body>
 <header>
-  <a href="index.html" class="back">← Volver al inicio</a>
+  <a href="index.html?v=20260913" class="back">← Volver al inicio</a>
   <div class="eyebrow">Biología · Tema 2 · Tipos de Células</div>
   <h1>🔬 Células Eucariotas</h1>
   <div class="tag-row"><span class="tag">🧫 Animal</span><span class="tag">🌿 Vegetal</span><span class="tag">🏛️ Organelas</span></div>
@@ -110,19 +116,22 @@ h1{font-size:clamp(24px,7vw,34px);font-weight:800;color:#fff;line-height:1.15;ma
     <div class="sr" id="sr"><span class="sn" id="sf"></span></div>
     <h2 id="rt"></h2><p id="rs"></p>
     <div class="rl" id="rl"></div>
-    <button class="br" onclick="init()">🔁 Intentar de nuevo</button>
+    <button class="br rev" id="brev" onclick="init(FALLIDAS)">🎯 Repasar mis errores</button>
+    <button class="br" id="bfull" onclick="init()">🔁 Intentar de nuevo</button>
   </div>
 </div>
 <script>
 var Q=[{"q": "¿Qué característica principal distingue a las células eucariotas de las procariotas?", "opts": ["Las eucariotas no tienen ribosomas", "Las eucariotas tienen el ADN protegido dentro del núcleo con membrana nuclear", "Las eucariotas son más pequeñas que las procariotas", "Las eucariotas no tienen membrana plasmática"], "ans": 1, "exp": "Las EUCARIOTAS tienen el ADN protegido dentro del NÚCLEO, rodeado por la MEMBRANA NUCLEAR (carioteca). Las procariotas no."}, {"q": "¿Qué es el citoesqueleto y qué hace?", "opts": ["La membrana que rodea al núcleo", "Fibras que dan forma a la célula y por las que se mueven las organelas", "El conjunto de ribosomas de la célula", "La capa externa de la membrana plasmática"], "ans": 1, "exp": "El CITOESQUELETO es una red de FIBRAS que da forma a la célula y sirve de 'carretera' por la que se mueven las organelas."}, {"q": "¿En qué organela ocurre la respiración celular?", "opts": ["En el núcleo", "En los ribosomas", "En las mitocondrias", "En el aparato de Golgi"], "ans": 2, "exp": "La RESPIRACIÓN CELULAR ocurre en las MITOCONDRIAS, donde se obtiene energía a partir de la glucosa."}, {"q": "¿Cuál es la diferencia entre el retículo endoplasmático rugoso y el liso?", "opts": ["El rugoso produce lípidos; el liso produce proteínas", "El rugoso sintetiza proteínas; el liso sintetiza lípidos y modifica proteínas", "Son lo mismo, solo cambia el nombre", "El rugoso está en animales; el liso en vegetales"], "ans": 1, "exp": "El RETÍCULO RUGOSO sintetiza PROTEÍNAS (tiene ribosomas adheridos). El RETÍCULO LISO sintetiza LÍPIDOS y modifica proteínas."}, {"q": "¿Qué hace el aparato de Golgi?", "opts": ["Produce energía para la célula", "Almacena el material genético", "Modifica y empaqueta proteínas y lípidos para distribuirlos", "Digiere organelas y materiales viejos"], "ans": 2, "exp": "El APARATO DE GOLGI MODIFICA y EMPAQUETA proteínas y lípidos para distribuirlos dentro y fuera de la célula."}, {"q": "¿Qué son los lisosomas y qué función cumplen?", "opts": ["Organelas que producen energía", "Organelas con enzimas que digieren materiales y organelas viejas", "Sacos que almacenan agua y nutrientes", "Estructuras que fabrican lípidos"], "ans": 1, "exp": "Los LISOSOMAS tienen ENZIMAS que DIGIEREN materiales extraños y organelas viejas (reciclaje celular)."}, {"q": "¿Qué organela realizan SOLO las células vegetales y qué proceso ocurre en ella?", "opts": ["Mitocondria · respiración celular", "Ribosoma · síntesis de proteínas", "Cloroplasto · fotosíntesis", "Lisosoma · digestión celular"], "ans": 2, "exp": "El CLOROPLASTO es exclusivo de las células VEGETALES y es donde ocurre la FOTOSÍNTESIS (contienen clorofila)."}, {"q": "¿Qué tienen las células vegetales que NO tienen las animales?", "opts": ["Mitocondrias y ribosomas", "Membrana plasmática y citoplasma", "Pared celular de celulosa, cloroplastos y vacuolas grandes", "Núcleo y aparato de Golgi"], "ans": 2, "exp": "Las células VEGETALES tienen PARED DE CELULOSA, CLOROPLASTOS y VACUOLAS grandes. Las animales NO tienen ninguna de estas tres."}, {"q": "¿Qué tienen las células animales que NO tienen las vegetales?", "opts": ["Membrana plasmática y ribosomas", "Centríolos y flagelos", "Mitocondrias y retículo endoplasmático", "Núcleo y aparato de Golgi"], "ans": 1, "exp": "Las células ANIMALES tienen CENTRÍOLOS y FLAGELOS. Las vegetales no tienen ninguno de los dos."}, {"q": "¿Qué función tienen los centríolos?", "opts": ["Producir energía durante la respiración", "Organizar la célula durante la división celular", "Transportar proteínas al exterior", "Sintetizar lípidos para la membrana"], "ans": 1, "exp": "Los CENTRÍOLOS organizan la célula durante la DIVISIÓN CELULAR (mitosis)."}, {"q": "¿Para qué sirven las cilias en células como las de las vías respiratorias?", "opts": ["Para producir energía adicional", "Para mover líquido o atrapar partículas", "Para comunicarse con otras células", "Para almacenar reservas de glucosa"], "ans": 1, "exp": "Las CILIAS son estructuras que MUEVEN LÍQUIDO o ATRAPAN PARTÍCULAS (como el mucus y el polvo en las vías respiratorias)."}, {"q": "¿Cuál es la función del núcleo celular en las eucariotas?", "opts": ["Producir energía para la célula", "Digerir materiales extraños", "Contener el ADN y dirigir la actividad de la célula", "Fabricar lípidos para la membrana"], "ans": 2, "exp": "El NÚCLEO CELULAR contiene el ADN y DIRIGE la actividad de la célula. Está rodeado por doble membrana (carioteca)."}];
-var cur=0,score=0,ans=[];
-var T=Q.length;
-function init(){cur=0;score=0;ans=[];
+var ALL=Q,cur=0,score=0,ans=[],T=Q.length,FALLIDAS=[],repaso=false;
+function init(set){
+  var usar=(set&&set.length)?set:ALL;
+  repaso=usar.length<ALL.length;
+  Q=usar;T=Q.length;cur=0;score=0;ans=[];
   document.getElementById('qcard').style.display='block';
   document.getElementById('res').className='results';render()}
 function render(){
   var q=Q[cur];
-  document.getElementById('qn').textContent='Pregunta '+(cur+1);
+  document.getElementById('qn').innerHTML=(repaso?'<span class="repaso-chip">🎯 Repaso de errores</span><br>':'')+'Pregunta '+(cur+1);
   document.getElementById('qt').textContent=q.q;
   document.getElementById('pt').textContent='Pregunta '+(cur+1)+' de '+T;
   document.getElementById('st').textContent=score+(score!==1?' correctas':' correcta');
@@ -160,18 +169,25 @@ function showRes(){
   document.getElementById('sr').style.setProperty('--pct',pct+'%');
   document.getElementById('sf').textContent=score+'/'+T;
   var ti,su;
-  if(score===T){ti='¡Perfecto! 🌟';su=''+T+'/'+T+'. ¡Lo tenés clavado!'}
+  if(score===T){ti=repaso?'¡Corregidas! 🌟':'¡Perfecto! 🌟';su=repaso?'Te salieron todas las que antes fallabas.':''+T+'/'+T+'. ¡Lo tenés clavado!'}
   else if(score>=T*.8){ti='¡Muy bien! 💪';su='Casi todo bien. Repasá las que fallaste.'}
   else if(score>=T*.6){ti='Bien, podés mejorar 📚';su='Más de la mitad bien. Vale repasar.'}
   else{ti='A repasar 😅';su='No te preocupes, con otro repaso va a quedar. 💜'}
   document.getElementById('rt').textContent=ti;document.getElementById('rs').textContent=su;
   var rl=document.getElementById('rl');rl.innerHTML='';
+  FALLIDAS=[];
   for(var i=0;i<ans.length;i++){
-    var a=ans[i];var d=document.createElement('div');d.className='ri '+(a.ok?'ok':'fail');
+    var a=ans[i];if(!a.ok)FALLIDAS.push(Q[i]);
+    var d=document.createElement('div');d.className='ri '+(a.ok?'ok':'fail');
     var h='<span class="rlab">'+(a.ok?'✅':'❌')+' P'+(i+1)+': '+a.q+'</span>';
     if(!a.ok)h+='<span class="rans">Tu respuesta: '+a.opts[a.chosen]+' · Correcta: '+a.opts[a.ans]+'</span>';
     d.innerHTML=h;rl.appendChild(d);
   }
+  var brev=document.getElementById('brev');
+  if(FALLIDAS.length){brev.className='br rev show';
+    brev.textContent='🎯 Repasar mis errores ('+FALLIDAS.length+')';}
+  else{brev.className='br rev';}
+  document.getElementById('bfull').textContent=repaso?'🔁 Hacer el examen completo':'🔁 Intentar de nuevo';
 }
 init();
 </script>

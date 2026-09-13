@@ -84,11 +84,17 @@ h1{font-size:clamp(24px,7vw,34px);font-weight:800;color:#fff;line-height:1.15;ma
 .br{width:100%;padding:15px;border-radius:13px;border:none;
   background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;
   font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;touch-action:manipulation}
+.br.rev{background:linear-gradient(135deg,var(--wrong),#fb923c);
+  margin-bottom:10px;display:none}
+.br.rev.show{display:block}
+.repaso-chip{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:#fb923c;background:rgba(251,146,60,.12);
+  border:1px solid rgba(251,146,60,.3);border-radius:99px;padding:3px 10px;margin-bottom:10px}
 </style>
 </head>
 <body>
 <header>
-  <a href="index.html" class="back">← Volver al inicio</a>
+  <a href="index.html?v=20260913" class="back">← Volver al inicio</a>
   <div class="eyebrow">Biología · Tema 2 · Versión 2</div>
   <h1>🔬 Células Eucariotas · V2</h1>
   <div class="tag-row"><span class="tag">🧫 Animal</span><span class="tag">🌿 Vegetal</span><span class="tag">🏛️ Organelas</span></div>
@@ -110,19 +116,22 @@ h1{font-size:clamp(24px,7vw,34px);font-weight:800;color:#fff;line-height:1.15;ma
     <div class="sr" id="sr"><span class="sn" id="sf"></span></div>
     <h2 id="rt"></h2><p id="rs"></p>
     <div class="rl" id="rl"></div>
-    <button class="br" onclick="init()">🔁 Intentar de nuevo</button>
+    <button class="br rev" id="brev" onclick="init(FALLIDAS)">🎯 Repasar mis errores</button>
+    <button class="br" id="bfull" onclick="init()">🔁 Intentar de nuevo</button>
   </div>
 </div>
 <script>
 var Q=[{"q": "La palabra 'eucariota' hace referencia a que estas células...", "opts": ["No tienen núcleo", "Tienen un núcleo verdadero (definido, con membrana)", "Son más pequeñas que las bacterias", "No tienen organelas"], "ans": 1, "exp": "EUCARIOTA significa 'núcleo verdadero': tienen un núcleo DEFINIDO, rodeado por membrana nuclear."}, {"q": "¿Qué membrana rodea y protege al núcleo?", "opts": ["La membrana plasmática", "La carioteca (membrana nuclear)", "La pared celular", "La membrana mitocondrial"], "ans": 1, "exp": "La CARIOTECA o membrana nuclear es la doble membrana que rodea y protege al núcleo de las células eucariotas."}, {"q": "¿A qué se le llama 'la central energética de la célula'?", "opts": ["Al núcleo", "A la mitocondria", "Al ribosoma", "A la vacuola"], "ans": 1, "exp": "La MITOCONDRIA es la 'central energética': allí ocurre la respiración celular que produce la energía (ATP) de la célula."}, {"q": "Si una célula fabrica muchas proteínas, ¿qué organela tendrá muy desarrollada?", "opts": ["El retículo endoplasmático rugoso (con ribosomas)", "La vacuola", "El cloroplasto", "La pared celular"], "ans": 0, "exp": "El RETÍCULO ENDOPLASMÁTICO RUGOSO tiene ribosomas adheridos y se encarga de fabricar proteínas. Estará muy desarrollado en células que producen muchas."}, {"q": "¿Qué organela funciona como el 'sistema de empaque y distribución'?", "opts": ["La mitocondria", "El aparato de Golgi", "El núcleo", "El lisosoma"], "ans": 1, "exp": "El APARATO DE GOLGI funciona como el sistema de EMPAQUE y DISTRIBUCIÓN: modifica, empaqueta y envía proteínas y lípidos."}, {"q": "¿Qué organela se encarga del 'reciclaje' y la digestión dentro de la célula?", "opts": ["El ribosoma", "El lisosoma", "El centríolo", "La mitocondria"], "ans": 1, "exp": "El LISOSOMA contiene enzimas digestivas y se encarga del RECICLAJE: digiere materiales y organelas viejas."}, {"q": "¿Qué organela exclusiva de las plantas captura la luz solar?", "opts": ["La mitocondria", "El cloroplasto", "El lisosoma", "El núcleo"], "ans": 1, "exp": "El CLOROPLASTO es exclusivo de las células vegetales: captura la luz solar y realiza la FOTOSÍNTESIS gracias a la clorofila."}, {"q": "Una célula con pared de celulosa, cloroplastos y una gran vacuola es...", "opts": ["Una célula animal", "Una célula vegetal", "Una bacteria", "Un virus"], "ans": 1, "exp": "Esas tres características (pared de celulosa, cloroplastos y vacuola grande) son típicas de la célula VEGETAL."}, {"q": "Una célula SIN pared celular ni cloroplastos, pero CON centríolos, es...", "opts": ["Una célula vegetal", "Una célula animal", "Una procariota", "Un hongo"], "ans": 1, "exp": "La célula ANIMAL no tiene pared ni cloroplastos, pero sí tiene CENTRÍOLOS (que las vegetales no tienen)."}, {"q": "¿Cuál es la diferencia clave de tamaño y complejidad entre eucariotas y procariotas?", "opts": ["Las eucariotas son más pequeñas y simples", "Las eucariotas son más grandes y complejas, con organelas y núcleo", "Son idénticas", "Las procariotas tienen más organelas"], "ans": 1, "exp": "Las EUCARIOTAS son más GRANDES y COMPLEJAS: tienen núcleo definido y organelas con membrana, a diferencia de las procariotas."}];
-var cur=0,score=0,ans=[];
-var T=Q.length;
-function init(){cur=0;score=0;ans=[];
+var ALL=Q,cur=0,score=0,ans=[],T=Q.length,FALLIDAS=[],repaso=false;
+function init(set){
+  var usar=(set&&set.length)?set:ALL;
+  repaso=usar.length<ALL.length;
+  Q=usar;T=Q.length;cur=0;score=0;ans=[];
   document.getElementById('qcard').style.display='block';
   document.getElementById('res').className='results';render()}
 function render(){
   var q=Q[cur];
-  document.getElementById('qn').textContent='Pregunta '+(cur+1);
+  document.getElementById('qn').innerHTML=(repaso?'<span class="repaso-chip">🎯 Repaso de errores</span><br>':'')+'Pregunta '+(cur+1);
   document.getElementById('qt').textContent=q.q;
   document.getElementById('pt').textContent='Pregunta '+(cur+1)+' de '+T;
   document.getElementById('st').textContent=score+(score!==1?' correctas':' correcta');
@@ -160,18 +169,25 @@ function showRes(){
   document.getElementById('sr').style.setProperty('--pct',pct+'%');
   document.getElementById('sf').textContent=score+'/'+T;
   var ti,su;
-  if(score===T){ti='¡Perfecto! 🌟';su=''+T+'/'+T+'. ¡Lo tenés clavado!'}
+  if(score===T){ti=repaso?'¡Corregidas! 🌟':'¡Perfecto! 🌟';su=repaso?'Te salieron todas las que antes fallabas.':''+T+'/'+T+'. ¡Lo tenés clavado!'}
   else if(score>=T*.8){ti='¡Muy bien! 💪';su='Casi todo bien. Repasá las que fallaste.'}
   else if(score>=T*.6){ti='Bien, podés mejorar 📚';su='Más de la mitad bien. Vale repasar.'}
   else{ti='A repasar 😅';su='No te preocupes, con otro repaso va a quedar. 💜'}
   document.getElementById('rt').textContent=ti;document.getElementById('rs').textContent=su;
   var rl=document.getElementById('rl');rl.innerHTML='';
+  FALLIDAS=[];
   for(var i=0;i<ans.length;i++){
-    var a=ans[i];var d=document.createElement('div');d.className='ri '+(a.ok?'ok':'fail');
+    var a=ans[i];if(!a.ok)FALLIDAS.push(Q[i]);
+    var d=document.createElement('div');d.className='ri '+(a.ok?'ok':'fail');
     var h='<span class="rlab">'+(a.ok?'✅':'❌')+' P'+(i+1)+': '+a.q+'</span>';
     if(!a.ok)h+='<span class="rans">Tu respuesta: '+a.opts[a.chosen]+' · Correcta: '+a.opts[a.ans]+'</span>';
     d.innerHTML=h;rl.appendChild(d);
   }
+  var brev=document.getElementById('brev');
+  if(FALLIDAS.length){brev.className='br rev show';
+    brev.textContent='🎯 Repasar mis errores ('+FALLIDAS.length+')';}
+  else{brev.className='br rev';}
+  document.getElementById('bfull').textContent=repaso?'🔁 Hacer el examen completo':'🔁 Intentar de nuevo';
 }
 init();
 </script>
