@@ -15,8 +15,9 @@ Por eso abren bien incluso desde el navegador interno de WhatsApp en el iPhone.
 
 Es caché del navegador, no un problema del repo. Por orden:
 
-1. Abrir el link con un parámetro al final, que saltea el caché:
-   `https://agerbilsky.github.io/Lulu_biologia/?v=3` (cambiar el número cada vez)
+1. Normalmente se arregla solo: el índice detecta que hay versión nueva y se recarga.
+   Si no, abrir el link con un parámetro al final, **cambiando el número cada vez**:
+   `https://agerbilsky.github.io/Lulu_biologia/?v=8`
 2. Si así se ve bien, limpiar el caché de verdad:
    **Ajustes → Safari → Borrar historial y datos de sitios web**
 3. Si sigue igual, revisar el deploy: pestaña **Actions** del repo. El último
@@ -30,12 +31,23 @@ y su CDN cachea unos 10 minutos. Mirar enseguida de subir algo siempre muestra l
 ## 🔄 Cómo actualizar un examen
 
 1. Editar o reemplazar el `.html` que corresponda.
-2. **Importante:** abrir `index.html` y cambiar la fecha en todos los links
-   (`?v=20260913-2` → la fecha del día; si actualizás dos veces el mismo día, agregale
-   `-2`, `-3`). Es lo que obliga al navegador de Lulú a bajar la versión nueva
-   en vez de servir la guardada.
-   El botón "Volver al inicio" de cada examen **no hay que tocarlo**: se versiona solo
-   con la fecha del día, por JavaScript.
+2. Cambiar la versión en **dos lugares**, siempre al mismo valor:
+   - `version.json` → el campo `"v"`
+   - `index.html` → la constante `var MIA` (al final, en el script de auto-versión)
+     y la fecha de los links `?v=...`
+3. Commit y esperar el check verde en **Actions**.
+
+El botón "Volver al inicio" de cada examen **no hay que tocarlo**: se versiona solo
+con la fecha del día, por JavaScript.
+
+### Cómo funciona el auto-chequeo de versión
+
+Al abrir el índice, un script consulta `version.json` pidiéndolo sin caché. Si la versión
+publicada no coincide con la que trae la copia guardada, el índice se recarga solo
+apuntando a una URL nueva, y eso fuerza una descarga fresca.
+
+Por eso el paso 2 es obligatorio: si `version.json` no cambia, el auto-chequeo no se entera
+de que hay algo nuevo.
 3. Commit y esperar el check verde en **Actions**.
 
 El `index.html` además trae etiquetas `Cache-Control` en el `<head>`. Ayudan en algunos
@@ -86,6 +98,8 @@ Los tres cubren los mismos temas pero no comparten ni una sola pregunta entre s�
 
 ### Otros
 
+- `version.json` — dice cuál es la versión publicada. Lo lee el índice para saber
+  si la copia guardada del navegador quedó vieja.
 - `index.html` — la portada, con dos solapas: 🔬 Biomoléculas y Células y 🧬 Genética.
   Cada solapa está organizada internamente por versiones.
 - `Clave-respuestas-genetica.pdf` — las 204 respuestas de los 15 exámenes de genética
